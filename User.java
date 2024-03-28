@@ -1,17 +1,14 @@
 import java.util.ArrayList;
 
 public class User {
-    private String username;
+    private final String username;
     private String password;
     private int newMessages;
     private Boolean strangersCanMessage;
     private ArrayList<User> friends;
     private ArrayList<User> friendRequests;
     private ArrayList<User> blockedUsers;
-    private ArrayList<Post> posts;
-    private ArrayList<Comment> comments;
     private ArrayList<GroupChat> dmsAndGroupChats;
-    private ArrayList<Comment> likedComments;
 
     public User(String username, String password, boolean strangersCanMessage) {
 	    this.username = username;
@@ -21,19 +18,13 @@ public class User {
 	    this.friends = null;
         this.friendRequests = null;
         this.blockedUsers = null;
-        this.posts = null;
         this.dmsAndGroupChats = null;
-        this.likedComments = null;
-        this.comments = null;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPassword() {
         return password;
@@ -139,72 +130,6 @@ public class User {
             throw new UserNotFoundException("User was not in your blocked list!");
         } catch (NullPointerException e) {
             throw new UserNotFoundException("User was not in your blocked list!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean likeComment(Comment comment) {
-        //returns true if successfully liked comment, false if comment was already liked
-        try {
-            if (!this.likedComments.contains(comment)) {
-                comment.setLikes(comment.getLikes() + 1);
-                this.likedComments.add(comment);
-                return true;
-            }
-            return false;
-        } catch (NullPointerException e) { //catches if likedComments is empty
-            comment.setLikes(comment.getLikes() + 1);
-            this.likedComments.add(comment);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public ArrayList<Post> getPosts() {
-        return posts;
-    }
-
-    public void addPost(String text) {
-        Post post = new Post(this, text);
-        this.posts.add(post);
-    }
-
-    public boolean deletePost(Post post) throws MessageNotFoundException {
-        try {
-            if (this.posts.contains(post)) {
-                this.posts.remove(post);
-                return true;
-            }
-            return false;
-        } catch (NullPointerException e) {
-            throw new MessageNotFoundException("No post matching that one was found!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public void addComment(Post post, String text) {
-        Comment comment = new Comment(this, text);
-        this.comments.add(comment);
-        post.addComment(comment);
-
-    }
-
-    public boolean deleteComment(Post post, Comment comment) throws MessageNotFoundException {
-        try {
-            if (this.comments.contains(comment) && this.equals(comment.getUser())) {
-                this.comments.remove(comment);
-                post.deleteComment(comment);
-                return true;
-            }
-            return false;
-        } catch (NullPointerException e) {
-            throw new MessageNotFoundException("No comments matching that one was found!");
         } catch (Exception e) {
             e.printStackTrace();
             return false;
