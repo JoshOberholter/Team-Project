@@ -9,16 +9,18 @@ public class User {
     private ArrayList<User> friendRequests;
     private ArrayList<User> blockedUsers;
     private ArrayList<GroupChat> dmsAndGroupChats;
+    private String profilePicturePath;
 
     public User(String username, String password, boolean strangersCanMessage) {
-	    this.username = username;
-	    this.password = password;
-	    this.strangersCanMessage = strangersCanMessage;
+        this.username = username;
+        this.password = password;
+        this.strangersCanMessage = strangersCanMessage;
         this.newMessages = 0;
-	    this.friends = null;
-        this.friendRequests = null;
-        this.blockedUsers = null;
-        this.dmsAndGroupChats = null;
+        this.friends = new ArrayList<>(); 
+        this.friendRequests = new ArrayList<>();
+        this.blockedUsers = new ArrayList<>();
+        this.dmsAndGroupChats = new ArrayList<>();
+        this.profilePicturePath = ""; 
     }
 
     public String getUsername() {
@@ -252,5 +254,13 @@ public class User {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public String getProfilePicturePath() {
+        return profilePicturePath;
+    }
+
+    public void setProfilePicturePath(String profilePicturePath) {
+        this.profilePicturePath = profilePicturePath;
     }
 }
