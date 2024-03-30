@@ -5,16 +5,26 @@ public class Message {
     private String message;
     private long date;
     private Boolean seen;
+    private String phtotoPath;
 
-    public Message(User user, String message) {
+    public Message(User user, String message, String photoPath) {
         this.user = user;
         this.message = message;
         this.date = System.currentTimeMillis();
         this.seen = false;
+        this.photoPath = photoPath;
     }
 
     public User getUser() {
         return user;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public String getMessage() {
