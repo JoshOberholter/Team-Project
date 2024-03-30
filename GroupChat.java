@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class GroupChat {
     private ArrayList<User> participants;
@@ -6,7 +7,7 @@ public class GroupChat {
 
     public GroupChat(ArrayList<User> participants) {
         this.participants = participants;
-        this.messages = null;
+        this.messages = new ArrayList<>();
     }
 
     public ArrayList<User> getParticipants() {
@@ -79,6 +80,15 @@ public class GroupChat {
             e.printStackTrace();
             return false;
         }
+    }
 
+    public List<String> getAllPhotoPaths() {
+        List<String> photoPaths = new ArrayList<>();
+        for (Message message : messages) {
+            if (message.getPhotoPath() != null && !message.getPhotoPath().isEmpty()) {
+                photoPaths.add(message.getPhotoPath());
+            }
+        }
+        return photoPaths;
     }
 }
