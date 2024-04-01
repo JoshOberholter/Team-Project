@@ -39,7 +39,7 @@ public class Message {
         return seen;
     }
 
-    public void setseen(boolean seen) {
+    public void setSeen(boolean seen) {
         this.seen = seen;
     }
 
