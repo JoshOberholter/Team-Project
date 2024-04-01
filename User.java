@@ -16,11 +16,11 @@ public class User {
         this.password = password;
         this.strangersCanMessage = strangersCanMessage;
         this.newMessages = 0;
-        this.friends = new ArrayList<>(); 
+        this.friends = new ArrayList<>();
         this.friendRequests = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
         this.dmsAndGroupChats = new ArrayList<>();
-        this.profilePicturePath = ""; 
+        this.profilePicturePath = "";
     }
 
     public String getUsername() {
@@ -31,7 +31,7 @@ public class User {
     public String getPassword() {
         return password;
     }
-    
+
     public boolean setPassword(String password) {
         //check if password can be used, then sets password to that and returns true
         int numbers = 0;
@@ -193,7 +193,25 @@ public class User {
     public ArrayList<User> getFriendRequests() {
         return friendRequests;
     }
-
+    
+    public boolean addFriendRequest(User user) {
+        // adding a user to my friend requests list
+        try {
+            if (this.friendRequests.contains(user)) {
+                return false;
+            } else {
+                this.friendRequests.add(user);
+                return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+    }
+    
+    public boolean sendFriendRequest(User user) throws UserNotFoundException {
+        return user.addFriendRequest(this);
+    }
+    
     public boolean acceptFriendRequest(User user) throws UserNotFoundException {
         // true if friend request is accepted successfully, false if user hasnt sent a request
         // assumes if user is in friend request, then they arent already friended
@@ -248,7 +266,7 @@ public class User {
 
     public boolean equals(User user) {
         try {
-            return (this.username.equals(user.getUsername()) && this.password.equals(user.getPassword()) && 
+            return (this.username.equals(user.getUsername()) && this.password.equals(user.getPassword()) &&
                     this.strangersCanMessage == user.strangersCanMessage);
         } catch (Exception e) {
             e.printStackTrace();
