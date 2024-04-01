@@ -54,12 +54,21 @@ public class Database {
             return false;
         }
     }
+    
+    public ArrayList<GroupChat> getGroupChats() {
+        return groupChats;
+    }
+    
     public boolean addGroupChat(GroupChat groupChat) {
         try {
-            synchronized (o) {
-                this.groupChats.add(groupChat);
+            if (!this.groupChats.contains(groupChat)) {
+                synchronized (o) {
+                    this.groupChats.add(groupChat);
+                }
+                return true;
+            } else {
+                return false;
             }
-             return true;
         } catch (Exception e) {
             return false;
         }
