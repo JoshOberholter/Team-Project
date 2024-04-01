@@ -19,7 +19,9 @@ public class Database {
     public ArrayList<User> getUsers() {
         return participants;
     }
-
+    public ArrayList<GroupChat> getGroupChats() {
+        return groupChats;
+    }
     public boolean addUser(User user) {
         //adds a user if no other user has the same username
         try {
