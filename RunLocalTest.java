@@ -260,4 +260,98 @@ public class RunLocalTest {
             assertEquals("path/to/photo.jpg", photoPaths.get(0));
         }
     }
+    public static class DatabaseTestCase {
+        private User user1;
+        private User user2;
+        private Database database;
+        private ArrayList<User> participants;
+        private GroupChat groupChat1;
+        private ArrayList<User> participants;
+        
+
+        @Before
+        public void setUp() {
+            user1 = new User("johnDoe", "P@ssw0rd123!", true);
+            user2 = new User("janeDoe", "SecureP@ss4!", false);
+            database = new Database();
+            database.addUser(user1);
+            database.addUser(user2);
+            participants = new ArrayList<>();
+            participants.add(user1);
+            participants.add(user2);
+            groupChat1 = new GroupChat(participants);
+        }
+
+        @Test
+        public void testAddUser() {
+            User user3 = new User("Max Mustermann", "xd565vgh@#$h", false);
+            assertTrue(database.addUser(user3));
+            assertTrue(database.getUsers().contains(user3));
+        }
+
+        @Test
+        public void testAddExisitingUser() {
+            User user3 = database.getUsers().get(0);
+            assertFalse(groupChat.addParticipant(user3));
+        }
+        
+        @Test
+        public void testRemoveUser() {
+            User user3 = database.getUsers().get(0);
+            assertTrue(database.removeUser(user3));
+            assertFalse(database.getUsers().contains(user3));
+        }
+        
+        @Test
+        public void testRemoveNewUser() {
+            User newUser = new User("ThisIsAFakeUsername", "p928yugh!#", true);
+            assertThrows(UserNotFoundException.class, () -> database.removeUser(newUser));
+        }
+
+        @Test
+        public void testAddGroupchat() {
+            ArrayList<User> participants2 = new ArrayList<>();
+            User user3 = new User("Max Mustermann", "xd565vgh@#$h", false);
+            participants2.add(user1);
+            participants2.add(user3);
+            GroupChat groupChatNew = new GroupChat(participants2);
+            assertTrue(database.addGroupChat(groupChatNew));
+            assertTrue(database.getGroupChats().contains(groupChatNew));
+        }
+
+        @Test
+        public void testAddGroupchat() {
+            ArrayList<User> participants2 = new ArrayList<>();
+            User user3 = new User("Max Mustermann", "xd565vgh@#$h", false);
+            participants2.add(user1);
+            participants2.add(user3);
+            GroupChat groupChatNew = new GroupChat(participants2);
+            assertTrue(database.addGroupChat(groupChatNew));
+            assertTrue(database.getGroupChats().contains(groupChatNew));
+        }
+        
+        @Test
+        public void testAddExistingGroupchat() {
+            GroupChat groupChatExisting = database.getGroupChats().get(0);
+            assertFalse(database.addGroupChat(groupChatExisting));
+        }
+
+        @Test
+        public void testRemoveGroupChat() {
+            GroupChat groupChatExisting = database.getGroupChats().get(0);
+            assertTrue(database.removeGroupChat(groupChatNew));
+            assertFalse(database.getGroupChats().contains(groupChatNew));
+        }
+
+        @Test
+        public void testRemoveNewGroupchat() {
+            ArrayList<User> participantsNew = new ArrayList<>();
+            User newUser = new User("ThisIsAFakeUsername", "p928yugh!#", true);
+            User user3 = new User("Max Mustermann", "xd565vgh@#$h", false);
+            participantsNew.add(user3);
+            participantsNew.add(newUser);
+            GroupChat groupChatNew = new GroupChat(participantsNew);
+            assertFalse(database.removeGroupChat(groupChatNew));
+        }
+    }     
 }
