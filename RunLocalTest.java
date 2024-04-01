@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  */
 public class RunLocalTest {
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(GroupChatTest.class, UnitTestCase.class);
+        Result result = JUnitCore.runClasses(GroupChatTest.class, UnitTestCase.class, MessageTestCase.class);
         System.out.printf("Test Count: %d.\n", result.getRunCount());
         if (result.wasSuccessful()) {
             System.out.printf("Excellent - all local tests ran successfully.\n");
@@ -38,6 +38,78 @@ public class RunLocalTest {
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure.toString());
             }
+        }
+    }
+    public static class MessageTestCase {
+        private User user1;
+        private User user2;
+        private String testMessageContent = "Hello, World!";
+        private String testPhotoPath = "/path/to/photo.jpg";
+        private Message messageWithPhoto;
+        private Message messageWithoutPhoto;
+
+        @Before
+        public void setUp() {
+            user1 = new User("johnDoe", "P@ssw0rd123!", true);
+            user2 = new User("janeDoe", "SecureP@ss4!", false);
+            messageWithPhoto = new Message(user1, testMessageContent, testPhotoPath);
+            messageWithoutPhoto = new Message(user1, testMessageContent);
+        }
+
+        @Test
+        public void testMessageConstructorWithPhoto() {
+            assertNotNull(messageWithPhoto);
+            assertEquals(user1, messageWithPhoto.getUser());
+            assertEquals(testMessageContent, messageWithPhoto.getMessage());
+            assertEquals(testPhotoPath, messageWithPhoto.getPhotoPath());
+            assertFalse(messageWithPhoto.isSeen());
+        }
+
+        @Test
+        public void testMessageConstructorWithoutPhoto() {
+            assertNotNull(messageWithoutPhoto);
+            assertEquals(user1, messageWithoutPhoto.getUser());
+            assertEquals(testMessageContent, messageWithoutPhoto.getMessage());
+            assertNull(messageWithoutPhoto.getPhotoPath());
+            assertFalse(messageWithoutPhoto.isSeen());
+        }
+
+        @Test
+        public void testSetPhotoPath() {
+            String newPhotoPath = "/new/path/to/photo.jpg";
+            messageWithoutPhoto.setPhotoPath(newPhotoPath);
+            assertEquals(newPhotoPath, messageWithoutPhoto.getPhotoPath());
+        }
+
+        @Test
+        public void testSetSeen() {
+            messageWithoutPhoto.setSeen(true);
+            assertTrue(messageWithoutPhoto.isSeen());
+        }
+
+        @Test
+        public void testEqualsWithSameAttributes() {
+            Message anotherMessage = new Message(user1, testMessageContent);
+            assertTrue("Messages will be equal", messageWithoutPhoto.equals(anotherMessage));
+        }
+
+        @Test
+        public void testEqualsWithDifferentUser() {
+            Message anotherMessage = new Message(user2, testMessageContent);
+            assertFalse("Messages from different users will not be equal", messageWithoutPhoto.equals(anotherMessage));
+        }
+
+        @Test
+        public void testEqualsWithDifferentContent() {
+            Message anotherMessage = new Message(user1, "Different content");
+            assertFalse("Messages with different content will not be equal", messageWithoutPhoto.equals(anotherMessage));
+        }
+
+        @Test
+        public void testEqualsWithPhotoPath() {
+            // Note: Based on the provided equals method, photoPath does not affect equality.
+            Message anotherMessageWithPhoto = new Message(user1, testMessageContent, "/another/path/to/photo.jpg");
+            assertTrue("Messages with different photoPath will be equal", messageWithPhoto.equals(anotherMessageWithPhoto));
         }
     }
     public static class UnitTestCase {
