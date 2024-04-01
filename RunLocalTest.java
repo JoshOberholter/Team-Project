@@ -41,44 +41,75 @@ public class RunLocalTest {
         }
     }
 
-    /**
-     * A set of public test cases.
-     *
-     * <p>Purdue University -- CS18000 -- Summer 2022</p>
-     *
-     * @author Purdue CS
-     * @version June 13, 2022
-     */
-    public static class TestCase {
-        private final PrintStream originalOutput = System.out;
-        private final InputStream originalSysin = System.in;
+    public static class GroupChatTest {
 
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayInputStream testIn;
-
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayOutputStream testOut;
+        private GroupChat groupChat;
+        private ArrayList<User> participants;
 
         @Before
-        public void outputStart() {
-            testOut = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(testOut));
+        public void setUp() {
+            participants = new ArrayList<>();
+            participants.add(new User("Josh Ober", "1234", false));
+            participants.add(new User("New Name", "abcd", true));
+            groupChat = new GroupChat(participants);
         }
 
-        @After
-        public void restoreInputAndOutput() {
-            System.setIn(originalSysin);
-            System.setOut(originalOutput);
+        @Test
+        public void testAddParticipant() throws UserNotFoundException {
+            User userToAdd = new User("guy", "abc123", true);
+            assertTrue(groupChat.addParticipant(userToAdd));
+            assertTrue(groupChat.getParticipants().contains(userToAdd));
         }
 
-        private String getOutput() {
-            return testOut.toString();
+        @Test
+        public void testAddExistingParticipant() {
+            User existingUser = participants.get(0);
+            assertThrows(UserNotFoundException.class, () -> groupChat.addParticipant(existingUser));
         }
 
-        @SuppressWarnings("SameParameterValue")
-        private void receiveInput(String str) {
-            testIn = new ByteArrayInputStream(str.getBytes());
-            System.setIn(testIn);
+        @Test
+        public void testRemoveParticipant() throws UserNotFoundException {
+            User userToRemove = participants.get(0);
+            assertTrue(groupChat.removeParticipant(userToRemove));
+            assertFalse(groupChat.getParticipants().contains(userToRemove));
+        }
+
+        @Test
+        public void testRemoveNonExistingParticipant() {
+            User nonExistingUser = new User("guy1", "abc123", true);
+            assertThrows(UserNotFoundException.class, () -> groupChat.removeParticipant(nonExistingUser));
+        }
+
+        @Test
+        public void testAddMessage() {
+            Message message = new Message(participants.get(1), "new message1");
+            assertTrue(groupChat.addMessage(message));
+            assertTrue(groupChat.getMessages().contains(message));
+        }
+
+        @Test
+        public void testRemoveMessage() throws MessageNotFoundException {
+            Message messageToRemove = new Message(participants.get(1), "new message2");
+            groupChat.addMessage(messageToRemove);
+            assertTrue(groupChat.removeMessage(messageToRemove));
+            assertFalse(groupChat.getMessages().contains(messageToRemove));
+        }
+
+        @Test
+        public void testRemoveNonExistingMessage() {
+            Message nonExistingMessage = new Message(participants.get(1), "new message3");
+            assertThrows(MessageNotFoundException.class, () -> groupChat.removeMessage(nonExistingMessage));
+        }
+
+        @Test
+        public void testGetAllPhotoPaths() {
+            Message messageWithPhoto = new Message(participants.get(1), "new message4");
+            messageWithPhoto.setPhotoPath("path/to/photo.jpg");
+            groupChat.addMessage(messageWithPhoto);
+
+            List<String> photoPaths = groupChat.getAllPhotoPaths();
+            assertEquals(1, photoPaths.size());
+            assertEquals("path/to/photo.jpg", photoPaths.get(0));
         }
     }
 }
