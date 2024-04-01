@@ -2,16 +2,17 @@ import java.util.ArrayList;
 
 public class Database {
     private ArrayList<User> participants;
-    private ArrayList<Message> posts;
+    private ArrayList<GroupChat> groupChats;
+
 
     public Database() {
         this.participants = null;
-        this.posts = null;
+        this.groupChats = null;
     }
 
-    public Database(ArrayList<User> participants, ArrayList<Message> posts) {
+    public Database(ArrayList<User> participants, ArrayList<GroupChat> groupChats) {
         this.participants = participants;
-        this.posts = posts;
+        this.groupChats = groupChats;
     }
 
     public ArrayList<User> getUsers() {
@@ -51,38 +52,24 @@ public class Database {
             return false;
         }
     }
-
-    public ArrayList<Message> getPosts() {
-        return posts;
-    }
-
-    public boolean addPost(Post post) {
+    public boolean addGroupChat(GroupChat groupChat) {
         try {
-            if (!this.posts.contains(post)) {
-                this.posts.add(post);
-                return true;
-            }
-            return false;
-        } catch (NullPointerException e) {
-            this.posts.add(post);
-            return true;
+            this.groupChats.add(groupChat);
+             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
 
-    public boolean deletePost(Post post) throws MessageNotFoundException {
+    public boolean removeGroupChat(GroupChat groupchat) {
         try {
-            if (this.posts.contains(post)) {
-                this.posts.remove(post);
+            if (this.groupChats.contains(groupchat)) {
+                this.groupChats.remove(groupchat);
                 return true;
+            } else {
+                return false;
             }
-            throw new MessageNotFoundException("Post not found!");
-        } catch (NullPointerException e) {
-            throw new MessageNotFoundException("Post not found!");
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
