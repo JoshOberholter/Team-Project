@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  */
 public class RunLocalTest {
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(TestCase.class);
+        Result result = JUnitCore.runClasses(GroupChatTest.class, UnitTestCase.class);
         System.out.printf("Test Count: %d.\n", result.getRunCount());
         if (result.wasSuccessful()) {
             System.out.printf("Excellent - all local tests ran successfully.\n");
@@ -39,6 +39,82 @@ public class RunLocalTest {
                 System.out.println(failure.toString());
             }
         }
+    }
+    public static class UnitTestCase {
+        private static User user1;
+        private static User user2;
+
+        @Before
+        public void setUp() {
+            user1 = new User("johnDoe", "P@ssw0rd123!", true);
+            user2 = new User("janeDoe", "P@ssw0rd123!", false);
+            // Additional setup as needed
+        }
+        @Test
+        public void testUserCreation() {
+            User newUser = new User("newUser", "N3wP@ss!", true);
+            assertEquals("newUser", newUser.getUsername());
+            // Continue with other assertions for initial state
+        }
+        @Test
+        public void testSetPasswordValid() {
+            assertTrue(user1.setPassword("N3wP@ssw0rd!"));
+        }
+
+        @Test
+        public void testSetPasswordInvalid() {
+            assertFalse(user1.setPassword("short"));
+        }
+        @Test
+        public void testAddFriend() {
+            user1.addFriend(user2);
+            assertTrue(user1.isFriend(user2));
+        }
+
+        @Test
+        public void testRemoveFriend() throws UserNotFoundException {
+            user1.addFriend(user2);
+            user1.removeFriend(user2);
+            assertFalse(user1.isFriend(user2));
+        }
+
+        @Test(expected = UserNotFoundException.class)
+        public void testRemoveFriendNotFound() throws UserNotFoundException {
+            user1.removeFriend(user2);
+        }
+        @Test
+        public void testBlockUser() {
+            user1.block(user2);
+            assertTrue(user1.isBlocked(user2));
+        }
+
+        @Test
+        public void testUnblockUser() throws UserNotFoundException {
+            user1.block(user2);
+            user1.unBlock(user2);
+            assertFalse(user1.isBlocked(user2));
+        }
+        @Test
+        public void testAddMessageToGroupChat() {
+            GroupChat groupChat = new GroupChat(new ArrayList<>(Arrays.asList(user1, user2)));
+            user1.addMessageToGroupChat("Hello, World!", groupChat);
+            // Verify the message was added correctly
+        }
+
+        @Test(expected = MessageNotFoundException.class)
+        public void testDeleteMessageInGroupChat() throws MessageNotFoundException {
+            // Setup group chat and add a message
+            // Attempt to delete the message and verify it's removed
+            // Attempting to remove it again should throw MessageNotFoundException
+        }
+
+        @Test
+        public void testProfilePicturePath() {
+            String path = "/images/user1.jpg";
+            user1.setProfilePicturePath(path);
+            assertEquals(path, user1.getProfilePicturePath());
+        }
+
     }
 
     public static class GroupChatTest {
