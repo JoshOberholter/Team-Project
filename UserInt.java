@@ -28,6 +28,7 @@ public interface UserInt {
     String getProfilePicturePath();
     void setProfilePicturePath(String profilePicturePath);
     boolean addFriendRequest(User user);
+    boolean sendFriendRequest(User user) throws UserNotFoundException;
 
 
 }
