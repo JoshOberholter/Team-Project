@@ -108,7 +108,7 @@ public class User {
         }
     }
 
-    public boolean Block(User user) {
+    public boolean block(User user) {
         //returns true if user is successfully added to block list
         try {
             if (!this.blockedUsers.contains(user) && !this.friends.contains(user)) {
@@ -154,7 +154,7 @@ public class User {
         this.strangersCanMessage = strangersCanMessage;
     }
 
-    public ArrayList<GroupChat> GetDmsAndGroupChats() {
+    public ArrayList<GroupChat> getDmsAndGroupChats() {
         return dmsAndGroupChats;
     }
 
