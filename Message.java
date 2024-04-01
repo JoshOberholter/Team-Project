@@ -3,17 +3,23 @@ import java.lang.System;
 public class Message {
     private User user;
     private String message;
-    private long date;
-    private boolean seen;
-    private String phtotoPath;
+    private Boolean seen;
+    private String photoPath;
 
     public Message(User user, String message, String photoPath) {
         this.user = user;
         this.message = message;
-        this.date = System.currentTimeMillis();
         this.seen = false;
         this.photoPath = photoPath;
     }
+
+    public Message(User user, String message) {
+        this.user = user;
+        this.message = message;
+        this.seen = false;
+    }
+
+
 
     public User getUser() {
         return user;
@@ -31,9 +37,6 @@ public class Message {
         return message;
     }
 
-    public long getDate() {
-        return date;
-    }
 
     public boolean isSeen() {
         return seen;
@@ -46,7 +49,7 @@ public class Message {
     public boolean equals(Object o) {
         if (o instanceof Message) {
             Message msg = (Message)o;
-            return (msg.user.equals(this.user) && msg.message.equals(this.message) && msg.date == this.date);
+            return (msg.user.equals(this.user) && msg.message.equals(this.message));
         }
         return false;
     }
