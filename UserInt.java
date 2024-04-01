@@ -27,6 +27,7 @@ public interface UserInt {
     boolean equals(User user);
     String getProfilePicturePath();
     void setProfilePicturePath(String profilePicturePath);
+    boolean addFriendRequest(User user);
 
 
 }
