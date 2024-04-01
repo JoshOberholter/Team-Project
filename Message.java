@@ -4,7 +4,7 @@ public class Message {
     private User user;
     private String message;
     private long date;
-    private Boolean seen;
+    private boolean seen;
     private String phtotoPath;
 
     public Message(User user, String message, String photoPath) {
