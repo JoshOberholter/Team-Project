@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Database {
     private ArrayList<User> participants;
     private ArrayList<GroupChat> groupChats;
+    private static Object o = new Object();
 
 
     public Database() {
@@ -19,29 +20,30 @@ public class Database {
         return participants;
     }
 
-    public boolean addUser(User user) throws UserNotFoundException {
+    public boolean addUser(User user) {
         //adds a user if no other user has the same username
         try {
-            for (int i = 0; i < participants.size(); i++) {
-                if (this.participants.get(i).getUsername().equals(user.getUsername())) {
-                    throw new UserNotFoundException("Username already taken!");
+            for (User myUser : participants) {
+                if (user.getUsername().equals(myUser.getUsername())) {
+                    return false;
                 }
             }
-            this.participants.add(user);
-            return true;
-        } catch (NullPointerException e) {
-            this.participants.add(user);
+            synchronized (o) {
+                this.participants.add(user);
+            }
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
+
     }
 
     public boolean removeUser(User user) throws UserNotFoundException {
         try {
             if (this.participants.contains(user)) {
-                this.participants.remove(user);
+                synchronized (o) {
+                    this.participants.remove(user);
+                }
                 return true;
             }
             throw new UserNotFoundException(String.format("%s is not a user.", user.getUsername()));
@@ -54,7 +56,9 @@ public class Database {
     }
     public boolean addGroupChat(GroupChat groupChat) {
         try {
-            this.groupChats.add(groupChat);
+            synchronized (o) {
+                this.groupChats.add(groupChat);
+            }
              return true;
         } catch (Exception e) {
             return false;
@@ -64,7 +68,9 @@ public class Database {
     public boolean removeGroupChat(GroupChat groupchat) {
         try {
             if (this.groupChats.contains(groupchat)) {
-                this.groupChats.remove(groupchat);
+                synchronized (o) {
+                    this.groupChats.remove(groupchat);
+                }
                 return true;
             } else {
                 return false;
