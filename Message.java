@@ -3,7 +3,7 @@ import java.lang.System;
 public class Message {
     private User user;
     private String message;
-    private Boolean seen;
+    private boolean seen;
     private String photoPath;
 
     public Message(User user, String message, String photoPath) {
