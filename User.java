@@ -11,9 +11,12 @@ public class User {
     private ArrayList<GroupChat> dmsAndGroupChats;
     private String profilePicturePath;
 
-    public User(String username, String password, boolean strangersCanMessage) {
+    public User(String username, String password, boolean strangersCanMessage) throws InvalidPasswordException {
         this.username = username;
-        this.password = password;
+        boolean validPassword = this.setPassword(password);
+        if (!validPassword) {
+            throw new InvalidPasswordException("Password does not meet the requirements");
+        }
         this.strangersCanMessage = strangersCanMessage;
         this.newMessages = 0;
         this.friends = new ArrayList<>();
@@ -193,7 +196,7 @@ public class User {
     public ArrayList<User> getFriendRequests() {
         return friendRequests;
     }
-    
+
     public boolean addFriendRequest(User user) {
         // adding a user to my friend requests list
         try {
@@ -207,11 +210,11 @@ public class User {
             return true;
         }
     }
-    
+
     public boolean sendFriendRequest(User user) throws UserNotFoundException {
         return user.addFriendRequest(this);
     }
-    
+
     public boolean acceptFriendRequest(User user) throws UserNotFoundException {
         // true if friend request is accepted successfully, false if user hasnt sent a request
         // assumes if user is in friend request, then they arent already friended
