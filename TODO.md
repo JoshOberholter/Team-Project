@@ -1,6 +1,4 @@
-1: delete posts and comments from user - Suraj
-2: Tread safe database and user - Josh
-3: photo storage for messages - Michael
-4: photo storage for users and groupchats - Michael
-5: system for requesting to be friends with someone
-6: Test cases
+1. Update the database to read into a file - Josh
+2. Set up a layout for the server and client - Sonya
+3. Allow the server to take in multiple threads -
+4. Create the communicaiton between the client and server that uses the methods from User and Database
