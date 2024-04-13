@@ -15,6 +15,8 @@ import java.net.*;
 
  public class Server {
     public static void main(String[] args) {
+     Database newDatabase = new Database();
+     newDatabase.openData();
         try {
             Server newServer = new Server();
             ServerSocket serverSocket = new ServerSocket(215);
