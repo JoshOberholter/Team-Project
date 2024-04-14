@@ -15,18 +15,26 @@ import java.net.*;
 
  public class Server {
     public static void main(String[] args) {
-     Database newDatabase = new Database();
-     newDatabase.openData();
         try {
-            Server newServer = new Server();
             ServerSocket serverSocket = new ServerSocket(215);
-            System.out.println("Waiting for the client to connect...");
-            boolean cont = true;
+            System.out.println("Server is waiting for client to connect...");
+            
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("Client connected!");
+                
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter writer = new PrintWriter(socket.getOutputStream()); 
+                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                
+                String username = reader.readLine(); // Read username sent by client
+                String password = reader.readLine(); // Read password sent by client
+                
+                // Placeholder authentication logic
+                if (username.equals("admin") && password.equals("password")) {
+                    writer.println("Login successful!");
+                } else {
+                    writer.println("Login failed!");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
