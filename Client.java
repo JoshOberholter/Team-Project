@@ -18,21 +18,28 @@ public class Client {
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "Hello!", "Greeting", JOptionPane.INFORMATION_MESSAGE);
         try {
-            String hostName = JOptionPane.showInputDialog(null, "Please enter the host name.", 
-                JOptionPane.PLAIN_MESSAGE);
+            String hostName = JOptionPane.showInputDialog(null, "Please enter the host name.", JOptionPane.PLAIN_MESSAGE);
             if (hostName == null) {
-                JOptionPane.showMessageDialog(null, "The connection could not be made. Sorry!", 
-                        "Connection Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The connection could not be made. Sorry!", "Connection Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            int portNumber = Integer.parseInt(JOptionPane.showInputDialog(null, 
-                    "Please enter the port number.", JOptionPane.PLAIN_MESSAGE));
+            int portNumber = 215; // Standardized on 215, no need to ask the user.
             Socket socket = new Socket(hostName, portNumber);
-            JOptionPane.showMessageDialog(null, "Connection successfully established!", 
-                    "Search Engine", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Connection successfully established!", "Connection Status", JOptionPane.INFORMATION_MESSAGE);
+            
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            boolean cont = true;
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            
+            // New code for login
+            String username = JOptionPane.showInputDialog(null, "Enter your username:", "Login", JOptionPane.PLAIN_MESSAGE);
+            String password = JOptionPane.showInputDialog(null, "Enter your password:", "Login", JOptionPane.PLAIN_MESSAGE);
+            writer.println(username);
+            writer.println(password);
+            
+            // Handle server response
+            String response = reader.readLine();
+            JOptionPane.showMessageDialog(null, response, "Server Response", JOptionPane.INFORMATION_MESSAGE);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
