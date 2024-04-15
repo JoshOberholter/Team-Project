@@ -7,4 +7,6 @@ public interface DatabaseInt {
     public boolean removeUser(User user);
     public boolean addGroupChat(GroupChat groupChat);
     public boolean removeGroupChat(GroupChat groupchat);
+    public boolean readDatabase();
+    public boolean writeDatabase();
 }
