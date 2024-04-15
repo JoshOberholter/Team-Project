@@ -1,7 +1,16 @@
-import javax.swing.*;
 import java.util.ArrayList;
 import java.io.*;
-import java.util.Arrays;
+
+/**
+ * A class to store the server's data, like all users, and all group chats.
+ *
+ * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
+ *
+ * @author Joshia Oberholtz, Micheal Chen, Sonya Kraft, Suraj Pilla,  Purdue CS
+ * @version April 15th, 2024
+ *
+ */
+
 
 public class Database {
     private ArrayList<User> participants;
@@ -153,10 +162,6 @@ public class Database {
                         }
                     }
 
-
-
-
-
                     int newMessages = Integer.parseInt(userThings[2]);
                     String profilePicturePath = userThings[userThings.length - 1];
 
@@ -199,14 +204,15 @@ public class Database {
                             }
                             String messageText = messageThings[1];
                             boolean seen = Boolean.parseBoolean(messageThings[2]);
+                            double time = Double.parseDouble(messageThings[3]);
                             if (messageThings.length == 4) {
                                 String photoPath  = messageThings[3];
-                                Message thisMessage = new Message(sender, messageText, photoPath);
+                                Message thisMessage = new Message(sender, messageText, photoPath, seen, time);
                                 thisMessage.setSeen(seen);
                                 messages.add(thisMessage);
 
                             } else {
-                                Message thisMessage = new Message(sender, messageText);
+                                Message thisMessage = new Message(sender, messageText, time);
                                 thisMessage.setSeen(seen);
                                 messages.add(thisMessage);
 
@@ -221,10 +227,9 @@ public class Database {
 
 
                 }
-
                 line = bfr.readLine();
+                newBFR.close();
             }
-
         } catch (IOException e) {
             return false;
         }
