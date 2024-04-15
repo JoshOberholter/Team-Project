@@ -9,5 +9,6 @@ public interface GroupChatInt {
     ArrayList<Message> getMessages();
     boolean addMessage(Message message);
     boolean removeMessage(Message message) throws MessageNotFoundException;
-
+    List<String> getAllPhotoPaths();
+    String toString();
 }
