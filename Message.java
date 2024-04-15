@@ -3,7 +3,7 @@ import java.lang.System;
 public class Message {
     private User user;
     private String message;
-    private boolean seen;
+    private Boolean seen;
     private String photoPath;
 
     public Message(User user, String message, String photoPath) {
@@ -17,6 +17,7 @@ public class Message {
         this.user = user;
         this.message = message;
         this.seen = false;
+        this.photoPath = "";
     }
 
 
@@ -52,5 +53,19 @@ public class Message {
             return (msg.user.equals(this.user) && msg.message.equals(this.message));
         }
         return false;
+    }
+
+    public String toString() {
+        String format = "";
+
+        format += String.format("#%s;%s;%b", this.user.getUsername(), this.message, this.seen);
+
+        if (this.photoPath.isEmpty()) {
+            format += "#";
+        } else {
+            format += String.format(";%s#", this.photoPath);
+        }
+
+        return format;
     }
 }
