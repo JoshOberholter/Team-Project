@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.io.*;
 import java.util.Arrays;
 /**
- * A server for the social media site.
  *
  * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
  *
