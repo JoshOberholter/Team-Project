@@ -46,10 +46,14 @@ public class GroupChat {
         }
     }
 
+    public void setMessages(ArrayList<Message> messages) {
+        this.messages = messages;
+    }
+
     public ArrayList<Message> getMessages() {
         return messages;
     }
-    
+
     public boolean addMessage(Message message) {
         try {
             if (!this.messages.contains(message)) {
@@ -90,5 +94,28 @@ public class GroupChat {
             }
         }
         return photoPaths;
+    }
+
+    public String toString() {
+        String format = "GroupChat<";
+
+        for (User user : participants) {
+            if (user.equals(participants.getLast())) {
+                format += String.format("%s", user.getUsername());
+            } else {
+                format += String.format("%s;", user.getUsername());
+            }
+        }
+        format += ",";
+        for (Message message : messages) {
+            if (message.equals(messages.getLast())) {
+                format += String.format("%s", message.toString());
+            } else {
+                format += String.format("%s;", message.toString());
+            }
+        }
+        format += ">";
+
+        return format;
     }
 }
