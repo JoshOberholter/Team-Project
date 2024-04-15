@@ -1,6 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to store group chats, the participants, and their messages.
+ *
+ * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
+ *
+ * @author Joshia Oberholtz, Micheal Chen, Sonya Kraft, Suraj Pilla,  Purdue CS
+ * @version April 15th, 2024
+ *
+ */
+
+
 public class GroupChat {
     private ArrayList<User> participants;
     private ArrayList<Message> messages;
@@ -100,7 +111,7 @@ public class GroupChat {
         String format = "GroupChat<";
 
         for (User user : participants) {
-            if (user.equals(participants.getLast())) {
+            if (user.equals(participants.get(participants.size() - 1))) {
                 format += String.format("%s", user.getUsername());
             } else {
                 format += String.format("%s;", user.getUsername());
@@ -108,7 +119,7 @@ public class GroupChat {
         }
         format += ",";
         for (Message message : messages) {
-            if (message.equals(messages.getLast())) {
+            if (message.equals(messages.get(messages.size() - 1))) {
                 format += String.format("%s", message.toString());
             } else {
                 format += String.format("%s;", message.toString());
@@ -117,5 +128,57 @@ public class GroupChat {
         format += ">";
 
         return format;
+    }
+
+    public GroupChat parseGroupchat(String line) {
+        if (line.contains("GroupChat<")) {
+            String[] groupChatThings = line.substring(10, line.length() - 1) .split(",");
+            String[] usernames = groupChatThings[0].split(";");
+            ArrayList<User> members = new ArrayList<>();
+            for (String username : usernames) {
+                for (User user : participants) {
+                    if (user.getUsername().equals(username)) {
+                        members.add(user);
+                    }
+                }
+            }
+
+            String[] messageStrings = groupChatThings[1].split("#");
+            ArrayList<Message> messages = new ArrayList<>();
+
+            for (String message : messageStrings) {
+                if (!message.isEmpty()) { // this is because of how the string is formatted
+                    String[] messageThings = message.split(";");
+                    String username = messageThings[0];
+                    User sender = null;
+                    for (User u : members) {
+                        if (u.getUsername().equals(username)) {
+                            sender = u;
+                        }
+                    }
+                    String messageText = messageThings[1];
+                    boolean seen = Boolean.parseBoolean(messageThings[2]);
+                    double time = Double.parseDouble(messageThings[3]);
+                    if (messageThings.length == 4) {
+                        String photoPath  = messageThings[3];
+                        Message thisMessage = new Message(sender, messageText, photoPath, time);
+                        thisMessage.setSeen(seen);
+                        messages.add(thisMessage);
+
+                    } else {
+                        Message thisMessage = new Message(sender, messageText, time);
+                        thisMessage.setSeen(seen);
+                        messages.add(thisMessage);
+
+                    }
+                }
+            }
+
+            GroupChat thisGroupChat = new GroupChat(members);
+            thisGroupChat.setMessages(messages);
+            return thisGroupChat;
+        } else {
+            return null;
+        }
     }
 }
