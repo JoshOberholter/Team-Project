@@ -1,5 +1,16 @@
 import java.util.ArrayList;
 
+/**
+ * A class to store User information.
+ * 
+ * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
+ *
+ * @author Joshia Oberholtz, Micheal Chen, Sonya Kraft, Suraj Pilla,  Purdue CS
+ * @version April 15th, 2024
+ *
+ */
+
+
 public class User {
     private final String username;
     private String password;
@@ -265,7 +276,7 @@ public class User {
     }
 
     public void addMessageToGroupChat(String text, GroupChat groupChat) {
-        Message newMessage = new Message(this, text);
+        Message newMessage = new Message(this, text, 0);
         groupChat.addMessage(newMessage);
     }
 
@@ -311,7 +322,7 @@ public class User {
         }
 
         for (User user : friends) {
-            if (user.equals(friends.getLast())) {
+            if (user.equals(friends.get(friends.size() - 1))) {
                 format += String.format("%s", user.getUsername());
             } else {
                 format += String.format("%s;", user.getUsername());
@@ -325,7 +336,7 @@ public class User {
         }
 
         for (User user : friendRequests) {
-            if (user.equals(friendRequests.getLast())) {
+            if (user.equals(friendRequests.get(friendRequests.size() - 1))) {
                 format += String.format("%s", user.getUsername());
             } else {
                 format += String.format("%s;", user.getUsername());
@@ -333,7 +344,7 @@ public class User {
         }
         format += ",";
         for (User user : blockedUsers) {
-            if (user.equals(blockedUsers.getLast())) {
+            if (user.equals(blockedUsers.get(blockedUsers.size() - 1))) {
                 format += String.format("%s", user.getUsername());
             } else {
                 format += String.format("%s;", user.getUsername());
