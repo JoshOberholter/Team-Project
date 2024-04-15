@@ -141,6 +141,18 @@ public class User {
         }
     }
 
+    public void setFriends(ArrayList<User> friends) {
+        this.friends = friends;
+    }
+
+    public void setFriendRequests(ArrayList<User> friendRequests) {
+        this.friendRequests = friendRequests;
+    }
+
+    public void setBlockedUsers(ArrayList<User> blockedUsers) {
+        this.blockedUsers = blockedUsers;
+    }
+
     public int getUnreadMessages() {
         return newMessages;
     }
@@ -277,11 +289,69 @@ public class User {
         }
     }
 
+
     public String getProfilePicturePath() {
         return profilePicturePath;
     }
 
+
+
     public void setProfilePicturePath(String profilePicturePath) {
         this.profilePicturePath = profilePicturePath;
+    }
+
+    public String toString() {
+
+        String format = "";
+        format += String.format("User<%s,%s,%d,%b", this.username, this.password, this.newMessages, this.strangersCanMessage);
+        format += ",";
+
+        if (this.friends.isEmpty()) {
+            format += "N/A";
+        }
+
+        for (User user : friends) {
+            if (user.equals(friends.getLast())) {
+                format += String.format("%s", user.getUsername());
+            } else {
+                format += String.format("%s;", user.getUsername());
+            }
+        }
+        format += ",";
+
+
+        if (this.friendRequests.isEmpty()) {
+            format += "N/A";
+        }
+
+        for (User user : friendRequests) {
+            if (user.equals(friendRequests.getLast())) {
+                format += String.format("%s", user.getUsername());
+            } else {
+                format += String.format("%s;", user.getUsername());
+            }
+        }
+        format += ",";
+        for (User user : blockedUsers) {
+            if (user.equals(blockedUsers.getLast())) {
+                format += String.format("%s", user.getUsername());
+            } else {
+                format += String.format("%s;", user.getUsername());
+            }
+        }
+
+        format += "N/A";
+
+
+        format += ",";
+        if (profilePicturePath.isEmpty()) {
+            format += "N/A>";
+        } else {
+            format += String.format("%s>", this.profilePicturePath);
+
+        }
+
+
+        return format;
     }
 }
