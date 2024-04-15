@@ -1,21 +1,12 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.io.*;
-
-/**
- * A class to store the server's data, like all users, and all group chats.
- *
- * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
- *
- * @author Joshia Oberholtz, Micheal Chen, Sonya Kraft, Suraj Pilla,  Purdue CS
- * @version April 15th, 2024
- *
- */
-
+import java.util.Arrays;
 
 public class Database {
     private ArrayList<User> participants;
     private ArrayList<GroupChat> groupChats;
-    private static Object o = new Object();
+    private static final Object o = new Object();
 
 
     public Database() {
@@ -162,6 +153,10 @@ public class Database {
                         }
                     }
 
+
+
+
+
                     int newMessages = Integer.parseInt(userThings[2]);
                     String profilePicturePath = userThings[userThings.length - 1];
 
@@ -204,15 +199,14 @@ public class Database {
                             }
                             String messageText = messageThings[1];
                             boolean seen = Boolean.parseBoolean(messageThings[2]);
-                            double time = Double.parseDouble(messageThings[3]);
                             if (messageThings.length == 4) {
                                 String photoPath  = messageThings[3];
-                                Message thisMessage = new Message(sender, messageText, photoPath, seen, time);
+                                Message thisMessage = new Message(sender, messageText, photoPath);
                                 thisMessage.setSeen(seen);
                                 messages.add(thisMessage);
 
                             } else {
-                                Message thisMessage = new Message(sender, messageText, time);
+                                Message thisMessage = new Message(sender, messageText);
                                 thisMessage.setSeen(seen);
                                 messages.add(thisMessage);
 
@@ -227,9 +221,10 @@ public class Database {
 
 
                 }
+
                 line = bfr.readLine();
-                newBFR.close();
             }
+
         } catch (IOException e) {
             return false;
         }
