@@ -26,9 +26,68 @@ public class Client extends JComponent implements Runnable {
     public final Color warningColor = new Color(218, 41, 79);
     public final Font buttonFont = new Font("Monospaced", Font.PLAIN, 10);
 
+    JTextField username;
+    JTextField password;
+    JButton login;
+    JButton newAccount;
+    JButton friendRequest;
+    JButton friends;
+    JButton blocked;
+    JButton gc1;
+    JButton gc2;
+    JButton gc3;
+    JButton gc4;
+    JButton gc5;
+    JButton gc6;
+    JButton gc7;
+    JButton gc8;
+    JButton gc9;
+    JButton gc10;
+    JButton addGC;
+    JButton deleteGC;
+    JButton addImage;
+    JTextField messageText;
+    JButton send;
+    JButton deleteMessage;
+    JButton fR1Accept;
+    JButton fR1Deny;
+    JButton fR2Accept;
+    JButton fR2Deny;
+    JButton fR3Accept;
+    JButton fR3Deny;
+    JButton fR4Accept;
+    JButton fR4Deny;
+    JButton fR5Accept;
+    JButton fR5Deny;
+    JButton addFriend;
+    JButton f1Accept;
+    JButton f1Deny;
+    JButton f2Accept;
+    JButton f2Deny;
+    JButton f3Accept;
+    JButton f3Deny;
+    JButton f4Accept;
+    JButton f4Deny;
+    JButton f5Accept;
+    JButton f5Deny;
+    JButton b1Unblock;
+    JButton b2Unblock;
+    JButton b3Unblock;
+    JButton b4Unblock;
+    JButton b5Unblock;
+    JTextField enterFriendUserRequest;
+    JButton enterRequest;
+    JTextField enterUsersRequest;
+    JButton enterNames;
+    JTextField enterUsersRequestD;
+    JButton enterNamesD;
+    
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Client());
     }
+    
     public void run() {
         JOptionPane.showMessageDialog(null, "Hello!", "Greeting", JOptionPane.INFORMATION_MESSAGE);
         try {
@@ -40,69 +99,69 @@ public class Client extends JComponent implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             JFrame loginFrame = new JFrame("StarRun Login"); {
-            Container logincontent = loginFrame.getContentPane();
-            logincontent.setLayout(null);
-            logincontent.setBackground(darkGrey);
-            JLabel usernameLabel = new JLabel(); {
-                usernameLabel.setText("Username: ");
-                usernameLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
-                usernameLabel.setForeground(accentColor);
-                usernameLabel.setBackground(darkGrey);
-                usernameLabel.setOpaque(true);
-                usernameLabel.setBounds(50, 20, 200, 25);
-            }
-            JTextField username = new JTextField(""); {
-                username.setBackground(grey);
-                username.setForeground(accentColor);
-                username.setOpaque(true);
-                username.setFont(buttonFont);
-                username.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-                username.setBounds(50, 45, 200, 25);
-            }
-            JLabel passwordLabel = new JLabel(); {
-                passwordLabel.setText("Password: ");
-                passwordLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
-                passwordLabel.setForeground(accentColor);
-                passwordLabel.setBackground(darkGrey);
-                passwordLabel.setOpaque(true);
-                passwordLabel.setBounds(50, 85, 200, 25);
-            }
-            JTextField password = new JTextField(""); {
-                password.setBackground(grey);
-                password.setForeground(accentColor);
-                password.setOpaque(true);
-                password.setFont(buttonFont);
-                password.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-                password.setBounds(50, 110, 200, 25);
-            }
-            JButton login = new JButton("Login"); {
-                login.setText("Login");
-                login.setBackground(grey);
-                login.setForeground(accentColor);
-                login.setOpaque(true);
-                login.setFont(buttonFont);
-                login.setBounds(50, 160, 200, 25);
-                login.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-            }
-            JButton newAccount = new JButton("Make New Account"); {
-                newAccount.setText("New Account");
-                newAccount.setBackground(grey);
-                newAccount.setForeground(accentColor);
-                newAccount.setOpaque(true);
-                newAccount.setFont(buttonFont);
-                newAccount.setBounds(50, 195, 200, 25);
-                newAccount.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-            }
-            logincontent.add(usernameLabel);
-            logincontent.add(passwordLabel);
-            logincontent.add(username);
-            logincontent.add(password);
-            logincontent.add(login);
-            logincontent.add(newAccount);
-            loginFrame.setSize(300, 300);
-            loginFrame.setLocationRelativeTo(null);
-            loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            loginFrame.setVisible(false);
+                Container logincontent = loginFrame.getContentPane();
+                logincontent.setLayout(null);
+                logincontent.setBackground(darkGrey);
+                JLabel usernameLabel = new JLabel(); {
+                    usernameLabel.setText("Username: ");
+                    usernameLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
+                    usernameLabel.setForeground(accentColor);
+                    usernameLabel.setBackground(darkGrey);
+                    usernameLabel.setOpaque(true);
+                    usernameLabel.setBounds(50, 20, 200, 25);
+                }
+                JTextField username = new JTextField(""); {
+                    username.setBackground(grey);
+                    username.setForeground(accentColor);
+                    username.setOpaque(true);
+                    username.setFont(buttonFont);
+                    username.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    username.setBounds(50, 45, 200, 25);
+                }
+                JLabel passwordLabel = new JLabel(); {
+                    passwordLabel.setText("Password: ");
+                    passwordLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
+                    passwordLabel.setForeground(accentColor);
+                    passwordLabel.setBackground(darkGrey);
+                    passwordLabel.setOpaque(true);
+                    passwordLabel.setBounds(50, 85, 200, 25);
+                }
+                JTextField password = new JTextField(""); {
+                    password.setBackground(grey);
+                    password.setForeground(accentColor);
+                    password.setOpaque(true);
+                    password.setFont(buttonFont);
+                    password.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    password.setBounds(50, 110, 200, 25);
+                }
+                JButton login = new JButton("Login"); {
+                    login.setText("Login");
+                    login.setBackground(grey);
+                    login.setForeground(accentColor);
+                    login.setOpaque(true);
+                    login.setFont(buttonFont);
+                    login.setBounds(50, 160, 200, 25);
+                    login.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                }
+                JButton newAccount = new JButton("Make New Account"); {
+                    newAccount.setText("New Account");
+                    newAccount.setBackground(grey);
+                    newAccount.setForeground(accentColor);
+                    newAccount.setOpaque(true);
+                    newAccount.setFont(buttonFont);
+                    newAccount.setBounds(50, 195, 200, 25);
+                    newAccount.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                }
+                logincontent.add(usernameLabel);
+                logincontent.add(passwordLabel);
+                logincontent.add(username);
+                logincontent.add(password);
+                logincontent.add(login);
+                logincontent.add(newAccount);
+                loginFrame.setSize(300, 300);
+                loginFrame.setLocationRelativeTo(null);
+                loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                loginFrame.setVisible(false);
             }
 
             JFrame mainFrame = new JFrame("");
