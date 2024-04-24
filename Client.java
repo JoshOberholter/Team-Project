@@ -1,19 +1,20 @@
 import javax.swing.*;
 import javax.imageio.*;
 import java.io.*;
+
 import java.util.*;
 import java.net.*;
 import java.awt.*;
 import java.awt.event.*;
 
 /**
- * A client for the social media site. 
+ * A client for the social media site.
  *
  * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
  *
- * @author Sonya Kraft Purdue CS 
+ * @author Sonya Kraft Purdue CS
  * @version April 13th, 2024
- * 
+ *
  * the portnumber is 215
  */
 
@@ -26,6 +27,8 @@ public class Client extends JComponent implements Runnable {
     public final Color warningColor = new Color(218, 41, 79);
     public final Font buttonFont = new Font("Monospaced", Font.PLAIN, 10);
 
+    JFrame loginFrame;
+    JFrame mainFrame;
     JTextField username;
     JTextField password;
     JButton login;
@@ -81,24 +84,93 @@ public class Client extends JComponent implements Runnable {
     JButton enterNames;
     JTextField enterUsersRequestD;
     JButton enterNamesD;
-    
 
+    PrintWriter writer;
+    BufferedReader reader;
+
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == login) {
+                try {
+                    writer.write("login");
+                    writer.println();
+                    writer.flush();
+
+                    writer.write(username.getText());
+                    writer.println();
+                    writer.flush();
+
+                    writer.write(password.getText());
+                    writer.println();
+                    writer.flush();
+
+                    String response = reader.readLine();
+                    if (response.equals("success")) {
+                        loginFrame.setVisible(false);
+                        mainFrame.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Incorrect Username or Password",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    username.setText("");
+                    password.setText("");
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == newAccount) {
+                try {
+                    writer.write("newUser");
+                    writer.println();
+                    writer.flush();
+
+                    writer.write(username.getText());
+                    writer.println();
+                    writer.flush();
+
+                    writer.write(password.getText());
+                    writer.println();
+                    writer.flush();
+
+                    String response = reader.readLine();
+
+                    if (response.equals("success")) {
+                        loginFrame.setVisible(false);
+                        mainFrame.setVisible(true);
+                    } else if (response.equals("invalidPassword")){
+                        JOptionPane.showMessageDialog(null, "Invalid Password",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    } else if (response.equals("taken")) {
+                        JOptionPane.showMessageDialog(null, "Username is Taken",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    username.setText("");
+                    password.setText("");
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    };
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Client());
     }
-    
+
     public void run() {
-        JOptionPane.showMessageDialog(null, "Hello!", "Greeting", JOptionPane.INFORMATION_MESSAGE);
         try {
             String hostName = "localhost";
             int portNumber = 215;
             Socket socket = new Socket(hostName, portNumber);
-            JOptionPane.showMessageDialog(null, "Connection successfully established!", 
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            JFrame loginFrame = new JFrame("StarRun Login"); {
+
+            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.writer = new PrintWriter(socket.getOutputStream());
+            loginFrame = new JFrame("StarRun Login"); {
                 Container logincontent = loginFrame.getContentPane();
                 logincontent.setLayout(null);
                 logincontent.setBackground(darkGrey);
@@ -110,7 +182,7 @@ public class Client extends JComponent implements Runnable {
                     usernameLabel.setOpaque(true);
                     usernameLabel.setBounds(50, 20, 200, 25);
                 }
-                JTextField username = new JTextField(""); {
+                username = new JTextField(""); {
                     username.setBackground(grey);
                     username.setForeground(accentColor);
                     username.setOpaque(true);
@@ -126,7 +198,7 @@ public class Client extends JComponent implements Runnable {
                     passwordLabel.setOpaque(true);
                     passwordLabel.setBounds(50, 85, 200, 25);
                 }
-                JTextField password = new JTextField(""); {
+                password = new JTextField(""); {
                     password.setBackground(grey);
                     password.setForeground(accentColor);
                     password.setOpaque(true);
@@ -134,7 +206,7 @@ public class Client extends JComponent implements Runnable {
                     password.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                     password.setBounds(50, 110, 200, 25);
                 }
-                JButton login = new JButton("Login"); {
+                login = new JButton("Login"); {
                     login.setText("Login");
                     login.setBackground(grey);
                     login.setForeground(accentColor);
@@ -142,15 +214,16 @@ public class Client extends JComponent implements Runnable {
                     login.setFont(buttonFont);
                     login.setBounds(50, 160, 200, 25);
                     login.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    login.addActionListener(actionListener);
                 }
-                JButton newAccount = new JButton("Make New Account"); {
-                    newAccount.setText("New Account");
+                newAccount = new JButton("Make New Account"); {
                     newAccount.setBackground(grey);
                     newAccount.setForeground(accentColor);
                     newAccount.setOpaque(true);
                     newAccount.setFont(buttonFont);
                     newAccount.setBounds(50, 195, 200, 25);
                     newAccount.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    newAccount.addActionListener(actionListener);
                 }
                 logincontent.add(usernameLabel);
                 logincontent.add(passwordLabel);
@@ -161,10 +234,10 @@ public class Client extends JComponent implements Runnable {
                 loginFrame.setSize(300, 300);
                 loginFrame.setLocationRelativeTo(null);
                 loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                loginFrame.setVisible(false);
+                loginFrame.setVisible(true);
             }
 
-            JFrame mainFrame = new JFrame("");
+            mainFrame = new JFrame("");
             Container content = mainFrame.getContentPane();
             content.setLayout(new BorderLayout());
             content.setBackground(grey);
@@ -230,133 +303,133 @@ public class Client extends JComponent implements Runnable {
                 gcList.setLayout(new BorderLayout());
                 gcList.setPreferredSize(new Dimension(100, 1000));
                 JPanel gcListList = new JPanel(); {
-                gcListList.setBackground(darkGrey);
-                gcListList.setLayout(null);
+                    gcListList.setBackground(darkGrey);
+                    gcListList.setLayout(null);
 
-            JButton gc1 = new JButton(" Filler "); {
-                gc1.setBackground(grey);
-                gc1.setForeground(starColor);
-                gc1.setOpaque(true);
-                gc1.setFont(buttonFont);
-                gc1.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc1.setBounds(5, 5, 90, 25);
-                gc1.setVisible(true);
-            }
-            JButton gc2 = new JButton(" Filler "); {
-                gc2.setBackground(grey);
-                gc2.setForeground(starColor);
-                gc2.setOpaque(true);
-                gc2.setFont(buttonFont);
-                gc2.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc2.setBounds(5, 35, 90, 25);
-                gc2.setVisible(true);
-            }
-            JButton gc3 = new JButton(" Filler "); {
-                gc3.setBackground(grey);
-                gc3.setForeground(starColor);
-                gc3.setOpaque(true);
-                gc3.setFont(buttonFont);
-                gc3.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc3.setBounds(5, 65, 90, 25);
-                gc3.setVisible(false);
-            }
-            JButton gc4 = new JButton(" Filler "); {
-                gc4.setBackground(grey);
-                gc4.setForeground(starColor);
-                gc4.setOpaque(true);
-                gc4.setFont(buttonFont);
-                gc4.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc4.setBounds(5, 95, 90, 25);
-                gc4.setVisible(false);
-            }
-            JButton gc5 = new JButton(" Filler "); {
-                gc5.setBackground(grey);
-                gc5.setForeground(starColor);
-                gc5.setOpaque(true);
-                gc5.setFont(buttonFont);
-                gc5.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc5.setBounds(5, 125, 90, 25);
-                gc5.setVisible(false);
-            }
-            JButton gc6 = new JButton(" Filler "); {
-                gc6.setBackground(grey);
-                gc6.setForeground(starColor);
-                gc6.setOpaque(true);
-                gc6.setFont(buttonFont);
-                gc6.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc6.setBounds(5, 155, 90, 25);
-                gc6.setVisible(false);
-            }
-            JButton gc7 = new JButton(" Filler "); {
-                gc7.setBackground(grey);
-                gc7.setForeground(starColor);
-                gc7.setOpaque(true);
-                gc7.setFont(buttonFont);
-                gc7.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc7.setBounds(5, 185, 90, 25);
-                gc7.setVisible(false);
-            }
-            JButton gc8 = new JButton(" Filler "); {
-                gc8.setBackground(grey);
-                gc8.setForeground(starColor);
-                gc8.setOpaque(true);
-                gc8.setFont(buttonFont);
-                gc8.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc8.setBounds(5, 215, 90, 25);
-                gc8.setVisible(false);
-            }
-            JButton gc9 = new JButton(" Filler "); {
-                gc9.setBackground(grey);
-                gc9.setForeground(starColor);
-                gc9.setOpaque(true);
-                gc9.setFont(buttonFont);
-                gc9.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc9.setBounds(5, 245, 90, 25);
-                gc9.setVisible(false);
-            }
-            JButton gc10 = new JButton(" Filler "); {
-                gc10.setBackground(grey);
-                gc10.setForeground(starColor);
-                gc10.setOpaque(true);
-                gc10.setFont(buttonFont);
-                gc10.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                gc10.setBounds(5, 275, 90, 25);
-                gc10.setVisible(false);
-            }
-            gcListList.add(gc1);
-            gcListList.add(gc2);
-            gcListList.add(gc3);
-            gcListList.add(gc4);
-            gcListList.add(gc5);
-            gcListList.add(gc6);
-            gcListList.add(gc7);
-            gcListList.add(gc8);
-            gcListList.add(gc9);
-            gcListList.add(gc10);
-            }
+                    JButton gc1 = new JButton(" Filler "); {
+                        gc1.setBackground(grey);
+                        gc1.setForeground(starColor);
+                        gc1.setOpaque(true);
+                        gc1.setFont(buttonFont);
+                        gc1.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc1.setBounds(5, 5, 90, 25);
+                        gc1.setVisible(true);
+                    }
+                    JButton gc2 = new JButton(" Filler "); {
+                        gc2.setBackground(grey);
+                        gc2.setForeground(starColor);
+                        gc2.setOpaque(true);
+                        gc2.setFont(buttonFont);
+                        gc2.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc2.setBounds(5, 35, 90, 25);
+                        gc2.setVisible(true);
+                    }
+                    JButton gc3 = new JButton(" Filler "); {
+                        gc3.setBackground(grey);
+                        gc3.setForeground(starColor);
+                        gc3.setOpaque(true);
+                        gc3.setFont(buttonFont);
+                        gc3.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc3.setBounds(5, 65, 90, 25);
+                        gc3.setVisible(false);
+                    }
+                    JButton gc4 = new JButton(" Filler "); {
+                        gc4.setBackground(grey);
+                        gc4.setForeground(starColor);
+                        gc4.setOpaque(true);
+                        gc4.setFont(buttonFont);
+                        gc4.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc4.setBounds(5, 95, 90, 25);
+                        gc4.setVisible(false);
+                    }
+                    JButton gc5 = new JButton(" Filler "); {
+                        gc5.setBackground(grey);
+                        gc5.setForeground(starColor);
+                        gc5.setOpaque(true);
+                        gc5.setFont(buttonFont);
+                        gc5.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc5.setBounds(5, 125, 90, 25);
+                        gc5.setVisible(false);
+                    }
+                    JButton gc6 = new JButton(" Filler "); {
+                        gc6.setBackground(grey);
+                        gc6.setForeground(starColor);
+                        gc6.setOpaque(true);
+                        gc6.setFont(buttonFont);
+                        gc6.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc6.setBounds(5, 155, 90, 25);
+                        gc6.setVisible(false);
+                    }
+                    JButton gc7 = new JButton(" Filler "); {
+                        gc7.setBackground(grey);
+                        gc7.setForeground(starColor);
+                        gc7.setOpaque(true);
+                        gc7.setFont(buttonFont);
+                        gc7.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc7.setBounds(5, 185, 90, 25);
+                        gc7.setVisible(false);
+                    }
+                    JButton gc8 = new JButton(" Filler "); {
+                        gc8.setBackground(grey);
+                        gc8.setForeground(starColor);
+                        gc8.setOpaque(true);
+                        gc8.setFont(buttonFont);
+                        gc8.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc8.setBounds(5, 215, 90, 25);
+                        gc8.setVisible(false);
+                    }
+                    JButton gc9 = new JButton(" Filler "); {
+                        gc9.setBackground(grey);
+                        gc9.setForeground(starColor);
+                        gc9.setOpaque(true);
+                        gc9.setFont(buttonFont);
+                        gc9.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc9.setBounds(5, 245, 90, 25);
+                        gc9.setVisible(false);
+                    }
+                    JButton gc10 = new JButton(" Filler "); {
+                        gc10.setBackground(grey);
+                        gc10.setForeground(starColor);
+                        gc10.setOpaque(true);
+                        gc10.setFont(buttonFont);
+                        gc10.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        gc10.setBounds(5, 275, 90, 25);
+                        gc10.setVisible(false);
+                    }
+                    gcListList.add(gc1);
+                    gcListList.add(gc2);
+                    gcListList.add(gc3);
+                    gcListList.add(gc4);
+                    gcListList.add(gc5);
+                    gcListList.add(gc6);
+                    gcListList.add(gc7);
+                    gcListList.add(gc8);
+                    gcListList.add(gc9);
+                    gcListList.add(gc10);
+                }
                 JPanel gcButtons = new JPanel(); {
-                gcButtons.setBackground(darkGrey);
-                gcButtons.setLayout(new BorderLayout());
-                gcButtons.setPreferredSize(new Dimension(100, 25));
-                JButton addGC = new JButton(" + "); {
-                    addGC.setBackground(grey);
-                    addGC.setForeground(starColor);
-                    addGC.setOpaque(true);
-                    addGC.setFont(buttonFont);
-                    addGC.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                    addGC.setAlignmentX(0.1f);
+                    gcButtons.setBackground(darkGrey);
+                    gcButtons.setLayout(new BorderLayout());
+                    gcButtons.setPreferredSize(new Dimension(100, 25));
+                    JButton addGC = new JButton(" + "); {
+                        addGC.setBackground(grey);
+                        addGC.setForeground(starColor);
+                        addGC.setOpaque(true);
+                        addGC.setFont(buttonFont);
+                        addGC.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        addGC.setAlignmentX(0.1f);
+                    }
+                    JButton deleteGC = new JButton(" - "); {
+                        deleteGC.setBackground(grey);
+                        deleteGC.setForeground(starColor);
+                        deleteGC.setOpaque(true);
+                        deleteGC.setFont(buttonFont);
+                        deleteGC.setBorder(BorderFactory.createLineBorder(starColor, 2));
+                        deleteGC.setAlignmentX(0.9f);
+                    }
+                    gcButtons.add(addGC, BorderLayout.WEST);
+                    gcButtons.add(deleteGC, BorderLayout.EAST);
                 }
-                JButton deleteGC = new JButton(" - "); {
-                    deleteGC.setBackground(grey);
-                    deleteGC.setForeground(starColor);
-                    deleteGC.setOpaque(true);
-                    deleteGC.setFont(buttonFont);
-                    deleteGC.setBorder(BorderFactory.createLineBorder(starColor, 2));
-                    deleteGC.setAlignmentX(0.9f);
-                }
-                gcButtons.add(addGC, BorderLayout.WEST);
-                gcButtons.add(deleteGC, BorderLayout.EAST);
-            }
                 gcList.add(gcListList, BorderLayout.CENTER);
                 gcList.add(gcButtons, BorderLayout.SOUTH);
                 content.add(gcList, BorderLayout.WEST);
@@ -1256,7 +1329,7 @@ public class Client extends JComponent implements Runnable {
                 addFriendDisp.add(addFriendHeader, BorderLayout.NORTH);
                 addFriendDisp.add(addFriendPanel, BorderLayout.CENTER);
             }
-            content.add(addFriendDisp, BorderLayout.CENTER); 
+            content.add(addFriendDisp, BorderLayout.CENTER);
 
             JPanel addGroupchatDisp = new JPanel(); {
                 addGroupchatDisp.setLayout(new BorderLayout());
@@ -1357,11 +1430,12 @@ public class Client extends JComponent implements Runnable {
             mainFrame.setSize(1000, 1000);
             mainFrame.setLocationRelativeTo(null);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainFrame.setVisible(true);
-            
+            mainFrame.setVisible(false);
+
+
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Connection Error.", 
+            JOptionPane.showMessageDialog(null, "Connection Error.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
