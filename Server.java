@@ -222,6 +222,7 @@ public class Server {
                             if (newDatabase.getUsers().get(i).getUsername().equals(username)){
                                 if (newDatabase.getUsers().get(i).getPassword().equals(password)) {
                                     response = "success";
+                                    clientUser = newDatabase.getUsers().get(i);
                                 }
                             }
                         }
@@ -253,7 +254,9 @@ public class Server {
 
                             // if username is not taken, try to initialize the user
                             if (!response.equals("taken")) {
-                                newDatabase.addUser(new User(username, password, false));
+                                User newUser = new User(username, password, false);
+                                newDatabase.addUser(newUser);
+                                clientUser = newUser;
                                 writer.write("success");
                                 writer.println();
                                 writer.flush();
@@ -335,6 +338,24 @@ public class Server {
                             } else {
                                 success = deleteMessage(groupchat, message);
                             }
+                            writer.println("" + success);
+                            break;
+                        case "isStrangersCanMessage": 
+                            writer.println(clientUser.isStrangersCanMessage());
+                            break;
+                        case "setStrangersCanMessage":
+                            try {
+                                boolean newStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
+                                clientUser.setStrangersCanMessage(newStrangersCanMessage);
+                                writer.println("true");
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                writer.println("false");
+                            }
+                            break;
+                        case "changePassword":
+                            String newPassword = reader.readLine();
+                            success = clientUser.setPassword(newPassword);
                             writer.println("" + success);
                             break;
                         case "exit":
