@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
  *
- * @author Joshia Oberholtz, Micheal Chen, Sonya Kraft, Suraj Pilla,  Purdue CS
+ * @author Joshia Oberholtzer, Micheal Chen, Sonya Kraft, Suraj Pilla,  Purdue CS
  * @version April 15th, 2024
  *
  * the portnumber is 215
@@ -49,7 +49,7 @@ public class Server {
             }
             return false;
         }
-    
+
         public synchronized boolean removeFriend(User threadedUser, String username) {
             for (int i = 0; i < newDatabase.getUsers().size(); i++) {
                 if (username.equals(newDatabase.getUsers().get(i).getUsername())) {
@@ -59,7 +59,7 @@ public class Server {
             }
             return false;
         }
-    
+
         public synchronized boolean respondFriendRequest(User threadedUser, String username, Boolean accepted) {
             for (int i = 0; i < newDatabase.getUsers().size(); i++) {
                 if (username.equals(newDatabase.getUsers().get(i).getUsername())) {
@@ -70,7 +70,7 @@ public class Server {
             }
             return false;
         }
-    
+
         public synchronized boolean blocked(User threadedUser, String username) {
             for (int i = 0; i < newDatabase.getUsers().size(); i++) {
                 if (username.equals(newDatabase.getUsers().get(i).getUsername())) {
@@ -86,12 +86,12 @@ public class Server {
             }
             return false;
         }
-    
+
         public synchronized void startGroupchat(ArrayList<User> participantsInGroupChat) {
             GroupChat newGroupChat = new GroupChat(participantsInGroupChat);
             newDatabase.addGroupChat(newGroupChat);
         }
-    
+
         public synchronized boolean deleteGroupchat(GroupChat groupchat) {
             for (int i = 0; i < newDatabase.getGroupChats().size(); i++) {
                 if (newDatabase.getGroupChats().get(i).equals(groupchat)) {
@@ -101,7 +101,7 @@ public class Server {
             }
             return false;
         }
-    
+
         public synchronized boolean addMessage(GroupChat groupchat, Message message) {
             for (int i = 0; i < newDatabase.getGroupChats().size(); i++) {
                 if (newDatabase.getGroupChats().get(i).equals(groupchat)) {
@@ -111,7 +111,7 @@ public class Server {
             }
             return false;
         }
-    
+
         public synchronized boolean deleteMessage(GroupChat groupchat, Message message) {
             for (int i = 0; i < newDatabase.getGroupChats().size(); i++) {
                 if (newDatabase.getGroupChats().get(i).equals(groupchat)) {
@@ -160,10 +160,10 @@ public class Server {
                         }
                     }
                 }
-    
+
                 String[] messageStrings = groupChatThings[1].split("#");
                 ArrayList<Message> messages = new ArrayList<>();
-    
+
                 for (String message : messageStrings) {
                     if (!message.isEmpty()) { // this is because of how the string is formatted
                         String[] messageThings = message.split(";");
@@ -182,16 +182,16 @@ public class Server {
                             Message thisMessage = new Message(sender, messageText, photoPath, time);
                             thisMessage.setSeen(seen);
                             messages.add(thisMessage);
-    
+
                         } else {
                             Message thisMessage = new Message(sender, messageText, time);
                             thisMessage.setSeen(seen);
                             messages.add(thisMessage);
-    
+
                         }
                     }
                 }
-    
+
                 GroupChat thisGroupChat = new GroupChat(members);
                 thisGroupChat.setMessages(messages);
                 return thisGroupChat;
@@ -207,32 +207,67 @@ public class Server {
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
                 boolean cont = true;
-                String username = "";
-                while (cont) {
-                    // Read username and password sent by client
-                    username = reader.readLine();
-                    String password = reader.readLine();
 
-                    // Placeholder authentication logic
-                    for (int i = 0; i < newDatabase.getUsers().size(); i++) {
-                        if (newDatabase.getUsers().get(i).getUsername().equals(username)){
-                            if (newDatabase.getUsers().get(i).getPassword().equals(password)) {
-                                writer.println("Login successful!");
-                                cont = false;
-                            } else {
-                                writer.println("Username or Password is incorrect");
+                do {
+                    String choice;
+                    // Either Login or create new user
+                    choice = reader.readLine();
+                    if (choice.equals("login")) {
+                        String username = reader.readLine();
+                        String password = reader.readLine();
+
+                        String response = "failure";
+
+                        for (int i = 0; i < newDatabase.getUsers().size(); i++) {
+                            if (newDatabase.getUsers().get(i).getUsername().equals(username)){
+                                if (newDatabase.getUsers().get(i).getPassword().equals(password)) {
+                                    response = "success";
+                                }
                             }
                         }
+
+                        writer.println(response);
+                        writer.flush();
+
+                        if (response.equals("success")) {
+                            break;
+                        }
+
+                    } else if (choice.equals("newUser")) {
+                        String username = reader.readLine();
+                        String password = reader.readLine();
+
+                        String response = "failure";
+
+                        try {
+                            // Checks if username is taken
+                            for (int i = 0; i < newDatabase.getUsers().size(); i++) {
+                                if (newDatabase.getUsers().get(i).getUsername().equals(username)){
+                                    response = "taken";
+                                    writer.write("taken");
+                                    writer.println();
+                                    writer.flush();
+                                    break;
+                                }
+                            }
+
+                            // if username is not taken, try to initialize the user
+                            if (!response.equals("taken")) {
+                                newDatabase.addUser(new User(username, password, false));
+                                writer.write("success");
+                                writer.println();
+                                writer.flush();
+                                break;
+                            }
+                        } catch (InvalidPasswordException ex) { // catch if password is invalid
+                            writer.write("invalidPassword");
+                            writer.println();
+                            writer.flush();
+                        }
                     }
-                    writer.println("Username or Password is incorrect");
-                }
-                //Sets up the User.
-                for (User user : newDatabase.getUsers()) {
-                    if (user.getUsername().equals(username)) {
-                        this.clientUser = user;
-                    }
-                }
-                cont = true;
+
+                } while (true);
+
                 while (cont) {
                     String dataLine = reader.readLine();
                     switch (dataLine) {
