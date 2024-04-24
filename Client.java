@@ -29,6 +29,13 @@ public class Client extends JComponent implements Runnable {
 
     JFrame loginFrame;
     JFrame mainFrame;
+    JPanel friendRequestDisp;
+    JPanel gcDisp;
+    JPanel friendsDisp;
+    JPanel blockedDisp;
+    JPanel addFriendDisp;
+    JPanel addGroupchatDisp;
+    JPanel deleteGroupchatDisp;
     JTextField username;
     JTextField password;
     JButton login;
@@ -155,6 +162,84 @@ public class Client extends JComponent implements Runnable {
                     ex.printStackTrace();
                 }
             }
+            if (e.getSource() == friendRequest) {
+                try {
+                    friendRequestDisp.setVisible(true);
+                    gcDisp.setVisible(false);
+                    friendsDisp.setVisible(false);
+                    blockedDisp.setVisible(false);
+                    addFriendDisp.setVisible(false);
+                    addGroupchatDisp.setVisible(false);
+                    deleteGroupchatDisp.setVisible(false);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == friends) {
+                try {
+                    friendRequestDisp.setVisible(false);
+                    gcDisp.setVisible(false);
+                    friendsDisp.setVisible(true);
+                    blockedDisp.setVisible(false);
+                    addFriendDisp.setVisible(false);
+                    addGroupchatDisp.setVisible(false);
+                    deleteGroupchatDisp.setVisible(false);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == blocked) {
+                try {
+                    friendRequestDisp.setVisible(false);
+                    gcDisp.setVisible(false);
+                    friendsDisp.setVisible(false);
+                    blockedDisp.setVisible(true);
+                    addFriendDisp.setVisible(false);
+                    addGroupchatDisp.setVisible(false);
+                    deleteGroupchatDisp.setVisible(false);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == addFriend) {
+                try {
+                    friendRequestDisp.setVisible(false);
+                    gcDisp.setVisible(false);
+                    friendsDisp.setVisible(false);
+                    blockedDisp.setVisible(false);
+                    addFriendDisp.setVisible(true);
+                    addGroupchatDisp.setVisible(false);
+                    deleteGroupchatDisp.setVisible(false);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == addGC) {
+                try {
+                    friendRequestDisp.setVisible(false);
+                    gcDisp.setVisible(false);
+                    friendsDisp.setVisible(false);
+                    blockedDisp.setVisible(false);
+                    addFriendDisp.setVisible(false);
+                    addGroupchatDisp.setVisible(true);
+                    deleteGroupchatDisp.setVisible(false);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == deleteGC) {
+                try {
+                    friendRequestDisp.setVisible(false);
+                    gcDisp.setVisible(false);
+                    friendsDisp.setVisible(false);
+                    blockedDisp.setVisible(false);
+                    addFriendDisp.setVisible(false);
+                    addGroupchatDisp.setVisible(false);
+                    deleteGroupchatDisp.setVisible(true);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     };
 
@@ -241,7 +326,7 @@ public class Client extends JComponent implements Runnable {
             Container content = mainFrame.getContentPane();
             content.setLayout(new BorderLayout());
             content.setBackground(grey);
-            JPanel header = new JPanel(); {
+            JPanel header = new JPanel();
                 header.setLayout(new OverlayLayout(header));
                 header.setPreferredSize(new Dimension(1000, 50));
                 header.setBorder(BorderFactory.createLineBorder(grey, 2));
@@ -296,7 +381,6 @@ public class Client extends JComponent implements Runnable {
                 header.add(headerButtons);
                 header.add(headerBackgroundImg);
                 content.add(header, BorderLayout.NORTH);
-            }
 
             JPanel gcList = new JPanel(); {
                 gcList.setBackground(darkGrey);
