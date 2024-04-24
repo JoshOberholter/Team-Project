@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.imageio.*;
 import java.io.*;
 
@@ -28,6 +29,9 @@ public class Client extends JComponent implements Runnable {
     public final Font buttonFont = new Font("Monospaced", Font.PLAIN, 10);
 
     JFrame loginFrame;
+    Container logincontent;
+    JLabel usernameLabel;
+    JLabel passwordLabel;
     JFrame mainFrame;
     JPanel friendRequestDisp;
     JPanel gcDisp;
@@ -36,13 +40,13 @@ public class Client extends JComponent implements Runnable {
     JPanel addFriendDisp;
     JPanel addGroupchatDisp;
     JPanel deleteGroupchatDisp;
-    JTextField username;
-    JTextField password;
-    JButton login;
-    JButton newAccount;
-    JButton friendRequest;
-    JButton friends;
-    JButton blocked;
+    JTextField username; //√
+    JTextField password; //√
+    JButton login; //√
+    JButton newAccount; //√
+    JButton friendRequest; //√
+    JButton friends; //√
+    JButton blocked; //√
     JButton gc1;
     JButton gc2;
     JButton gc3;
@@ -53,8 +57,8 @@ public class Client extends JComponent implements Runnable {
     JButton gc8;
     JButton gc9;
     JButton gc10;
-    JButton addGC;
-    JButton deleteGC;
+    JButton addGC; //√
+    JButton deleteGC; //√
     JButton addImage;
     JTextField messageText;
     JButton send;
@@ -69,7 +73,7 @@ public class Client extends JComponent implements Runnable {
     JButton fR4Deny;
     JButton fR5Accept;
     JButton fR5Deny;
-    JButton addFriend;
+    JButton addFriend; //√
     JButton f1Accept;
     JButton f1Deny;
     JButton f2Accept;
@@ -91,6 +95,9 @@ public class Client extends JComponent implements Runnable {
     JButton enterNames;
     JTextField enterUsersRequestD;
     JButton enterNamesD;
+    JTextField profileNewPassword;
+    JButton profileChangePassword;
+    JButton changeStrangersCanMessage;
 
     PrintWriter writer;
     BufferedReader reader;
@@ -256,10 +263,10 @@ public class Client extends JComponent implements Runnable {
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.writer = new PrintWriter(socket.getOutputStream());
             loginFrame = new JFrame("StarRun Login"); {
-                Container logincontent = loginFrame.getContentPane();
+                logincontent = loginFrame.getContentPane();
                 logincontent.setLayout(null);
                 logincontent.setBackground(darkGrey);
-                JLabel usernameLabel = new JLabel(); {
+                usernameLabel = new JLabel(); {
                     usernameLabel.setText("Username: ");
                     usernameLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
                     usernameLabel.setForeground(accentColor);
@@ -275,7 +282,7 @@ public class Client extends JComponent implements Runnable {
                     username.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                     username.setBounds(50, 45, 200, 25);
                 }
-                JLabel passwordLabel = new JLabel(); {
+                passwordLabel = new JLabel(); {
                     passwordLabel.setText("Password: ");
                     passwordLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
                     passwordLabel.setForeground(accentColor);
@@ -326,7 +333,7 @@ public class Client extends JComponent implements Runnable {
             Container content = mainFrame.getContentPane();
             content.setLayout(new BorderLayout());
             content.setBackground(grey);
-            JPanel header = new JPanel();
+            JPanel header = new JPanel(); {
                 header.setLayout(new OverlayLayout(header));
                 header.setPreferredSize(new Dimension(1000, 50));
                 header.setBorder(BorderFactory.createLineBorder(grey, 2));
@@ -381,6 +388,7 @@ public class Client extends JComponent implements Runnable {
                 header.add(headerButtons);
                 header.add(headerBackgroundImg);
                 content.add(header, BorderLayout.NORTH);
+            }
 
             JPanel gcList = new JPanel(); {
                 gcList.setBackground(darkGrey);
@@ -1511,11 +1519,80 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(deleteGroupchatDisp, BorderLayout.CENTER);
 
+            JPanel profileDisp = new JPanel(); {
+                profileDisp.setLayout(null);
+                profileDisp.setBackground(grey);
+                profileDisp.setVisible(true);
+                profileDisp.setOpaque(true);
+                JLabel profileUsername = new JLabel(); {
+                    profileUsername.setBackground(lightGrey);
+                    profileUsername.setForeground(accentColor);
+                    profileUsername.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    profileUsername.setText("Username: " + username.getText());
+                    profileUsername.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    profileUsername.setBounds(300, 20, 300, 25);
+                }
+                JLabel profilePassword = new JLabel(); {
+                    profilePassword.setBackground(lightGrey);
+                    profilePassword.setForeground(accentColor);
+                    profilePassword.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    profilePassword.setText("Password: " + password.getText());
+                    profilePassword.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    profilePassword.setBounds(300, 55, 300, 25);
+                }
+                JLabel profileCPL = new JLabel(); {
+                    profileCPL.setBackground(grey);
+                    profileCPL.setForeground(accentColor);
+                    profileCPL.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    profileCPL.setText("Change password:");
+                    profileCPL.setBounds(300, 100, 300, 25);
+                }
+                JTextField profileNewPassword = new JTextField(); {
+                    profileNewPassword.setBackground(lightGrey);
+                    profileNewPassword.setForeground(accentColor);
+                    profileNewPassword.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    profileNewPassword.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    profileNewPassword.setBounds(300, 135, 300, 25);
+                }
+                JButton profileChangePassword = new JButton("Change Password"); {
+                    profileChangePassword.setBackground(lightGrey);
+                    profileChangePassword.setForeground(accentColor);
+                    profileChangePassword.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    profileChangePassword.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    profileChangePassword.setBounds(400, 170, 100, 25);
+                }
+                JLabel profileStrangersCanMessage = new JLabel(); {
+                    profileStrangersCanMessage.setBackground(lightGrey);
+                    profileStrangersCanMessage.setForeground(accentColor);
+                    profileStrangersCanMessage.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    writer.println("isStrangersCanMessage");
+                    writer.flush();
+                    Boolean isStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
+                    profileStrangersCanMessage.setText("Strangers can message me: " + isStrangersCanMessage);
+                    profileStrangersCanMessage.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    profileStrangersCanMessage.setBounds(300, 225, 300, 25);
+                }
+                JButton changeStrangersCanMessage = new JButton("Change if strangers can message me"); {
+                    changeStrangersCanMessage.setBackground(lightGrey);
+                    changeStrangersCanMessage.setForeground(accentColor);
+                    changeStrangersCanMessage.setFont(new Font("Monospaced", Font.PLAIN, 20));
+                    changeStrangersCanMessage.setBorder(BorderFactory.createLineBorder(accentColor, 2));
+                    changeStrangersCanMessage.setBounds(400, 270, 100, 25);
+                }
+                profileDisp.add(profileUsername);
+                profileDisp.add(profilePassword);
+                profileDisp.add(profileCPL);
+                profileDisp.add(profileNewPassword);
+                profileDisp.add(profileChangePassword);
+                profileDisp.add(profileStrangersCanMessage);
+                profileDisp.add(changeStrangersCanMessage);
+            }
+            content.add(profileDisp, BorderLayout.CENTER);
+
             mainFrame.setSize(1000, 1000);
             mainFrame.setLocationRelativeTo(null);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainFrame.setVisible(false);
-
+            mainFrame.setVisible(true);
 
         } catch (Exception e) {
             e.printStackTrace();
