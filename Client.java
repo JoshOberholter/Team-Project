@@ -28,18 +28,41 @@ public class Client extends JComponent implements Runnable {
     public final Color warningColor = new Color(218, 41, 79);
     public final Font buttonFont = new Font("Monospaced", Font.PLAIN, 10);
 
+    public String userUsername;
+    public String userPassword;
+    public Boolean userStrangersCanMessage;
+
     JFrame loginFrame;
     Container logincontent;
     JLabel usernameLabel;
     JLabel passwordLabel;
     JFrame mainFrame;
+    Container content;
+    JPanel gcButtons;
+    JPanel gcListList;
+    JPanel gcList;
+    JPanel header;
+    JPanel headerButtons;
     JPanel friendRequestDisp;
+    JLabel friendRequestHeader;
+    JPanel friendRequestList;
+    JPanel fR1;
+    JLabel fR1User;
+    JPanel fR2;
+    JLabel fR2User;
+    JPanel fR3;
+    JLabel fR3User;
+    JPanel fR4;
+    JLabel fR4User;
+    JPanel fR5;
+    JLabel fR5User;
     JPanel gcDisp;
     JPanel friendsDisp;
     JPanel blockedDisp;
     JPanel addFriendDisp;
     JPanel addGroupchatDisp;
     JPanel deleteGroupchatDisp;
+    JPanel profileDisp;
     JTextField username; //√
     JTextField password; //√
     JButton login; //√
@@ -121,6 +144,9 @@ public class Client extends JComponent implements Runnable {
 
                     String response = reader.readLine();
                     if (response.equals("success")) {
+                        userUsername = username.getText();
+                        userPassword = password.getText();
+                        userStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
                         loginFrame.setVisible(false);
                         mainFrame.setVisible(true);
                     } else {
@@ -152,6 +178,9 @@ public class Client extends JComponent implements Runnable {
                     String response = reader.readLine();
 
                     if (response.equals("success")) {
+                        userUsername = username.getText();
+                        userPassword = password.getText();
+                        userStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
                         loginFrame.setVisible(false);
                         mainFrame.setVisible(true);
                     } else if (response.equals("invalidPassword")){
@@ -171,6 +200,49 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == friendRequest) {
                 try {
+                    ArrayList<JLabel> fRUsers = new ArrayList<JLabel>();
+                    ArrayList<JPanel> fRPanel = new ArrayList<JPanel>();
+                    fRUsers.add(fR1User);
+                    fRUsers.add(fR2User);
+                    fRUsers.add(fR3User);
+                    fRUsers.add(fR4User);
+                    fRUsers.add(fR5User);
+                    fRPanel.add(fR1);
+                    fRPanel.add(fR2);
+                    fRPanel.add(fR3);
+                    fRPanel.add(fR4);
+                    fRPanel.add(fR5);
+                    writer.println("getFriendRequests");
+                    writer.flush();
+                    int i = Integer.parseInt(reader.readLine());
+                    if (i > 5) {
+                        fR1User.setText(reader.readLine());
+                        fR1.setVisible(true);
+                        fR2User.setText(reader.readLine());
+                        fR2.setVisible(true);
+                        fR3User.setText(reader.readLine());
+                        fR3.setVisible(true);
+                        fR4User.setText(reader.readLine());
+                        fR4.setVisible(true);
+                        fR5User.setText(reader.readLine());
+                        fR5.setVisible(true);
+                    } else if (i == 0) {
+                        fR1.setVisible(false);
+                        fR2.setVisible(false);
+                        fR3.setVisible(false);
+                        fR4.setVisible(false);
+                        fR5.setVisible(false);
+                    } else {
+                        for (int j = 0; j < i; j++) {
+                            fRUsers.get(j).setText(reader.readLine());
+                        }
+                        for (int j = 0; j < 5; j++) {
+                            if (fRUsers.get(j).getText().equals("")) {
+                                fRPanel.get(j).setVisible(false);
+                            }
+                        }
+                    }
+                    System.out.println("friendRequest pressed");
                     friendRequestDisp.setVisible(true);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -184,6 +256,7 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == friends) {
                 try {
+                    System.out.println("friends pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(true);
@@ -197,6 +270,7 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == blocked) {
                 try {
+                    System.out.println("blocked pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -210,6 +284,7 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == addFriend) {
                 try {
+                    System.out.println("addFriend pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -223,6 +298,7 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == addGC) {
                 try {
+                    System.out.println("addGC pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -236,6 +312,7 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == deleteGC) {
                 try {
+                    System.out.println("deleteGC pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -330,10 +407,10 @@ public class Client extends JComponent implements Runnable {
             }
 
             mainFrame = new JFrame("");
-            Container content = mainFrame.getContentPane();
+            content = mainFrame.getContentPane();
             content.setLayout(new BorderLayout());
             content.setBackground(grey);
-            JPanel header = new JPanel(); {
+            header = new JPanel(); {
                 header.setLayout(new OverlayLayout(header));
                 header.setPreferredSize(new Dimension(1000, 50));
                 header.setBorder(BorderFactory.createLineBorder(grey, 2));
@@ -344,7 +421,7 @@ public class Client extends JComponent implements Runnable {
                     headerBackgroundImg.setOpaque(true);
                     headerBackgroundImg.setAlignmentX(0.5f);
                 }
-                JPanel headerButtons = new JPanel(); {
+                headerButtons = new JPanel(); {
                     headerButtons.setLayout(null);
                     headerButtons.setOpaque(false);
                 }
@@ -357,29 +434,32 @@ public class Client extends JComponent implements Runnable {
                     gcLabel.setBorder(BorderFactory.createLineBorder(starColor, 2));
                     gcLabel.setBounds(7, 7, 76, 36);
                 }
-                JButton friendRequest = new JButton(" Friend\nRequests "); {
+                friendRequest = new JButton(" Friend\nRequests "); {
                     friendRequest.setBackground(grey);
                     friendRequest.setForeground(starColor);
                     friendRequest.setOpaque(true);
                     friendRequest.setFont(buttonFont);
                     friendRequest.setBorder(BorderFactory.createLineBorder(starColor, 2));
                     friendRequest.setBounds(1000 - 110 - 21 - 130, 7, 110, 36);
+                    friendRequest.addActionListener(actionListener);
                 }
-                JButton friends = new JButton(" Friends "); {
+                friends = new JButton(" Friends "); {
                     friends.setBackground(grey);
                     friends.setForeground(starColor);
                     friends.setOpaque(true);
                     friends.setFont(buttonFont);
                     friends.setBorder(BorderFactory.createLineBorder(starColor, 2));
                     friends.setBounds(1000 - 130 - 14, 7, 65, 36);
+                    friends.addActionListener(actionListener);
                 }
-                JButton blocked = new JButton(" Blocked "); {
+                blocked = new JButton(" Blocked "); {
                     blocked.setBackground(grey);
                     blocked.setForeground(starColor);
                     blocked.setOpaque(true);
                     blocked.setFont(buttonFont);
                     blocked.setBorder(BorderFactory.createLineBorder(starColor, 2));
                     blocked.setBounds(1000 - 65 - 7, 7, 65, 36);
+                    blocked.addActionListener(actionListener);
                 }
                 headerButtons.add(gcLabel);
                 headerButtons.add(friendRequest);
@@ -390,15 +470,15 @@ public class Client extends JComponent implements Runnable {
                 content.add(header, BorderLayout.NORTH);
             }
 
-            JPanel gcList = new JPanel(); {
+            gcList = new JPanel(); {
                 gcList.setBackground(darkGrey);
                 gcList.setLayout(new BorderLayout());
                 gcList.setPreferredSize(new Dimension(100, 1000));
-                JPanel gcListList = new JPanel(); {
+                gcListList = new JPanel(); {
                     gcListList.setBackground(darkGrey);
                     gcListList.setLayout(null);
 
-                    JButton gc1 = new JButton(" Filler "); {
+                    gc1 = new JButton(" Filler "); {
                         gc1.setBackground(grey);
                         gc1.setForeground(starColor);
                         gc1.setOpaque(true);
@@ -407,7 +487,7 @@ public class Client extends JComponent implements Runnable {
                         gc1.setBounds(5, 5, 90, 25);
                         gc1.setVisible(true);
                     }
-                    JButton gc2 = new JButton(" Filler "); {
+                    gc2 = new JButton(" Filler "); {
                         gc2.setBackground(grey);
                         gc2.setForeground(starColor);
                         gc2.setOpaque(true);
@@ -416,7 +496,7 @@ public class Client extends JComponent implements Runnable {
                         gc2.setBounds(5, 35, 90, 25);
                         gc2.setVisible(true);
                     }
-                    JButton gc3 = new JButton(" Filler "); {
+                    gc3 = new JButton(" Filler "); {
                         gc3.setBackground(grey);
                         gc3.setForeground(starColor);
                         gc3.setOpaque(true);
@@ -425,7 +505,7 @@ public class Client extends JComponent implements Runnable {
                         gc3.setBounds(5, 65, 90, 25);
                         gc3.setVisible(false);
                     }
-                    JButton gc4 = new JButton(" Filler "); {
+                    gc4 = new JButton(" Filler "); {
                         gc4.setBackground(grey);
                         gc4.setForeground(starColor);
                         gc4.setOpaque(true);
@@ -434,7 +514,7 @@ public class Client extends JComponent implements Runnable {
                         gc4.setBounds(5, 95, 90, 25);
                         gc4.setVisible(false);
                     }
-                    JButton gc5 = new JButton(" Filler "); {
+                    gc5 = new JButton(" Filler "); {
                         gc5.setBackground(grey);
                         gc5.setForeground(starColor);
                         gc5.setOpaque(true);
@@ -443,7 +523,7 @@ public class Client extends JComponent implements Runnable {
                         gc5.setBounds(5, 125, 90, 25);
                         gc5.setVisible(false);
                     }
-                    JButton gc6 = new JButton(" Filler "); {
+                    gc6 = new JButton(" Filler "); {
                         gc6.setBackground(grey);
                         gc6.setForeground(starColor);
                         gc6.setOpaque(true);
@@ -452,7 +532,7 @@ public class Client extends JComponent implements Runnable {
                         gc6.setBounds(5, 155, 90, 25);
                         gc6.setVisible(false);
                     }
-                    JButton gc7 = new JButton(" Filler "); {
+                    gc7 = new JButton(" Filler "); {
                         gc7.setBackground(grey);
                         gc7.setForeground(starColor);
                         gc7.setOpaque(true);
@@ -461,7 +541,7 @@ public class Client extends JComponent implements Runnable {
                         gc7.setBounds(5, 185, 90, 25);
                         gc7.setVisible(false);
                     }
-                    JButton gc8 = new JButton(" Filler "); {
+                    gc8 = new JButton(" Filler "); {
                         gc8.setBackground(grey);
                         gc8.setForeground(starColor);
                         gc8.setOpaque(true);
@@ -470,7 +550,7 @@ public class Client extends JComponent implements Runnable {
                         gc8.setBounds(5, 215, 90, 25);
                         gc8.setVisible(false);
                     }
-                    JButton gc9 = new JButton(" Filler "); {
+                    gc9 = new JButton(" Filler "); {
                         gc9.setBackground(grey);
                         gc9.setForeground(starColor);
                         gc9.setOpaque(true);
@@ -479,7 +559,7 @@ public class Client extends JComponent implements Runnable {
                         gc9.setBounds(5, 245, 90, 25);
                         gc9.setVisible(false);
                     }
-                    JButton gc10 = new JButton(" Filler "); {
+                    gc10 = new JButton(" Filler "); {
                         gc10.setBackground(grey);
                         gc10.setForeground(starColor);
                         gc10.setOpaque(true);
@@ -499,11 +579,11 @@ public class Client extends JComponent implements Runnable {
                     gcListList.add(gc9);
                     gcListList.add(gc10);
                 }
-                JPanel gcButtons = new JPanel(); {
+                gcButtons = new JPanel(); {
                     gcButtons.setBackground(darkGrey);
                     gcButtons.setLayout(new BorderLayout());
                     gcButtons.setPreferredSize(new Dimension(100, 25));
-                    JButton addGC = new JButton(" + "); {
+                    addGC = new JButton(" + "); {
                         addGC.setBackground(grey);
                         addGC.setForeground(starColor);
                         addGC.setOpaque(true);
@@ -511,7 +591,7 @@ public class Client extends JComponent implements Runnable {
                         addGC.setBorder(BorderFactory.createLineBorder(starColor, 2));
                         addGC.setAlignmentX(0.1f);
                     }
-                    JButton deleteGC = new JButton(" - "); {
+                    deleteGC = new JButton(" - "); {
                         deleteGC.setBackground(grey);
                         deleteGC.setForeground(starColor);
                         deleteGC.setOpaque(true);
@@ -527,7 +607,7 @@ public class Client extends JComponent implements Runnable {
                 content.add(gcList, BorderLayout.WEST);
             }
 
-            JPanel gcDisp = new JPanel(); {
+            gcDisp = new JPanel(); {
                 gcDisp.setBackground(grey);
                 gcDisp.setLayout(new BorderLayout());
                 gcDisp.setVisible(false);
@@ -803,7 +883,7 @@ public class Client extends JComponent implements Runnable {
                     message.setLayout(null);
                     message.setBorder(BorderFactory.createLineBorder(lightGrey, 1));
                     message.setPreferredSize(new Dimension(900, 80));
-                    JButton addImage = new JButton(" + "); {
+                    addImage = new JButton(" + "); {
                         addImage.setForeground(accentColor);
                         addImage.setBackground(lightGrey);
                         addImage.setOpaque(true);
@@ -819,7 +899,7 @@ public class Client extends JComponent implements Runnable {
                         messageText.setOpaque(true);
                         messageText.setBounds(350, 20, 200, 40);
                     }
-                    JButton send = new JButton("Send"); {
+                    send = new JButton("Send"); {
                         send.setForeground(accentColor);
                         send.setBackground(lightGrey);
                         send.setOpaque(true);
@@ -827,7 +907,7 @@ public class Client extends JComponent implements Runnable {
                         send.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                         send.setBounds(560, 20, 50, 40);
                     }
-                    JButton deleteMessage = new JButton("Delete Messages"); {
+                    deleteMessage = new JButton("Delete Messages"); {
                         deleteMessage.setForeground(accentColor);
                         deleteMessage.setBackground(lightGrey);
                         deleteMessage.setOpaque(true);
@@ -845,25 +925,26 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(gcDisp, BorderLayout.CENTER);
 
-            JPanel friendRequestDisp = new JPanel(); {
+            friendRequestDisp = new JPanel(); {
                 friendRequestDisp.setLayout(new BorderLayout());
                 friendRequestDisp.setBackground(grey);
-                friendRequestDisp.setVisible(false);
-                JLabel friendRequestHeader = new JLabel("  Friend Requests"); {
+                friendRequestDisp.setVisible(true);
+                friendRequestDisp.setOpaque(true);
+                friendRequestHeader = new JLabel("  Friend Requests"); {
                     friendRequestHeader.setBackground(grey);
                     friendRequestHeader.setForeground(accentColor);
                     friendRequestHeader.setOpaque(true);
                     friendRequestHeader.setFont(new Font("Monospaced", Font.PLAIN, 20));
                     friendRequestHeader.setPreferredSize(new Dimension(900, 50));
                 }
-                JPanel friendRequestList = new JPanel(); {
+                friendRequestList = new JPanel(); {
                     friendRequestList.setBackground(grey);
                     friendRequestList.setLayout(new BoxLayout(friendRequestList, BoxLayout.Y_AXIS));
-                    JPanel fR1 = new JPanel(); {
+                    fR1 = new JPanel(); {
                         fR1.setBackground(grey);
                         fR1.setLayout(null);
                         fR1.setPreferredSize(new Dimension(900, 70));
-                        JLabel fR1User = new JLabel(""); {
+                        fR1User = new JLabel(""); {
                             fR1User.setBackground(lightGrey);
                             fR1User.setFont(new Font("Monospaced", Font.PLAIN, 15));
                             fR1User.setForeground(accentColor);
@@ -871,7 +952,7 @@ public class Client extends JComponent implements Runnable {
                             fR1User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR1User.setBounds(20, 10, 700, 50);
                         }
-                        JButton fR1Accept = new JButton("√"); {
+                        fR1Accept = new JButton("√"); {
                             fR1Accept.setBackground(lightGrey);
                             fR1Accept.setForeground(accentColor);
                             fR1Accept.setOpaque(true);
@@ -879,7 +960,7 @@ public class Client extends JComponent implements Runnable {
                             fR1Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR1Accept.setBounds(740, 10, 50, 50);
                         }
-                        JButton fR1Deny = new JButton("X"); {
+                        fR1Deny = new JButton("X"); {
                             fR1Deny.setBackground(lightGrey);
                             fR1Deny.setForeground(accentColor);
                             fR1Deny.setOpaque(true);
@@ -891,11 +972,11 @@ public class Client extends JComponent implements Runnable {
                         fR1.add(fR1Accept);
                         fR1.add(fR1Deny);
                     }
-                    JPanel fR2 = new JPanel(); {
+                    fR2 = new JPanel(); {
                         fR2.setBackground(grey);
                         fR2.setLayout(null);
                         fR2.setPreferredSize(new Dimension(900, 70));
-                        JLabel fR2User = new JLabel(""); {
+                        fR2User = new JLabel(""); {
                             fR2User.setBackground(lightGrey);
                             fR2User.setFont(new Font("Monospaced", Font.PLAIN, 15));
                             fR2User.setForeground(accentColor);
@@ -903,7 +984,7 @@ public class Client extends JComponent implements Runnable {
                             fR2User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR2User.setBounds(20, 10, 700, 50);
                         }
-                        JButton fR2Accept = new JButton("√"); {
+                        fR2Accept = new JButton("√"); {
                             fR2Accept.setBackground(lightGrey);
                             fR2Accept.setForeground(accentColor);
                             fR2Accept.setOpaque(true);
@@ -911,7 +992,7 @@ public class Client extends JComponent implements Runnable {
                             fR2Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR2Accept.setBounds(740, 10, 50, 50);
                         }
-                        JButton fR2Deny = new JButton("X"); {
+                        fR2Deny = new JButton("X"); {
                             fR2Deny.setBackground(lightGrey);
                             fR2Deny.setForeground(accentColor);
                             fR2Deny.setOpaque(true);
@@ -923,11 +1004,11 @@ public class Client extends JComponent implements Runnable {
                         fR2.add(fR2Accept);
                         fR2.add(fR2Deny);
                     }
-                    JPanel fR3 = new JPanel(); {
+                    fR3 = new JPanel(); {
                         fR3.setBackground(grey);
                         fR3.setLayout(null);
                         fR3.setPreferredSize(new Dimension(900, 70));
-                        JLabel fR3User = new JLabel(""); {
+                        fR3User = new JLabel(""); {
                             fR3User.setBackground(lightGrey);
                             fR3User.setFont(new Font("Monospaced", Font.PLAIN, 15));
                             fR3User.setForeground(accentColor);
@@ -935,7 +1016,7 @@ public class Client extends JComponent implements Runnable {
                             fR3User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR3User.setBounds(20, 10, 700, 50);
                         }
-                        JButton fR3Accept = new JButton("√"); {
+                        fR3Accept = new JButton("√"); {
                             fR3Accept.setBackground(lightGrey);
                             fR3Accept.setForeground(accentColor);
                             fR3Accept.setOpaque(true);
@@ -943,7 +1024,7 @@ public class Client extends JComponent implements Runnable {
                             fR3Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR3Accept.setBounds(740, 10, 50, 50);
                         }
-                        JButton fR3Deny = new JButton("X"); {
+                        fR3Deny = new JButton("X"); {
                             fR3Deny.setBackground(lightGrey);
                             fR3Deny.setForeground(accentColor);
                             fR3Deny.setOpaque(true);
@@ -955,11 +1036,11 @@ public class Client extends JComponent implements Runnable {
                         fR3.add(fR3Accept);
                         fR3.add(fR3Deny);
                     }
-                    JPanel fR4 = new JPanel(); {
+                    fR4 = new JPanel(); {
                         fR4.setBackground(grey);
                         fR4.setLayout(null);
                         fR4.setPreferredSize(new Dimension(900, 70));
-                        JLabel fR4User = new JLabel(""); {
+                        fR4User = new JLabel(""); {
                             fR4User.setBackground(lightGrey);
                             fR4User.setFont(new Font("Monospaced", Font.PLAIN, 15));
                             fR4User.setForeground(accentColor);
@@ -967,7 +1048,7 @@ public class Client extends JComponent implements Runnable {
                             fR4User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR4User.setBounds(20, 10, 700, 50);
                         }
-                        JButton fR4Accept = new JButton("√"); {
+                        fR4Accept = new JButton("√"); {
                             fR4Accept.setBackground(lightGrey);
                             fR4Accept.setForeground(accentColor);
                             fR4Accept.setOpaque(true);
@@ -975,7 +1056,7 @@ public class Client extends JComponent implements Runnable {
                             fR4Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR4Accept.setBounds(740, 10, 50, 50);
                         }
-                        JButton fR4Deny = new JButton("X"); {
+                        fR4Deny = new JButton("X"); {
                             fR4Deny.setBackground(lightGrey);
                             fR4Deny.setForeground(accentColor);
                             fR4Deny.setOpaque(true);
@@ -987,7 +1068,7 @@ public class Client extends JComponent implements Runnable {
                         fR4.add(fR4Accept);
                         fR4.add(fR4Deny);
                     }
-                    JPanel fR5 = new JPanel(); {
+                    fR5 = new JPanel(); {
                         fR5.setBackground(grey);
                         fR5.setLayout(null);
                         fR5.setPreferredSize(new Dimension(900, 70));
@@ -999,7 +1080,7 @@ public class Client extends JComponent implements Runnable {
                             fR5User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR5User.setBounds(20, 10, 700, 50);
                         }
-                        JButton fR5Accept = new JButton("√"); {
+                        fR5Accept = new JButton("√"); {
                             fR5Accept.setBackground(lightGrey);
                             fR5Accept.setForeground(accentColor);
                             fR5Accept.setOpaque(true);
@@ -1007,7 +1088,7 @@ public class Client extends JComponent implements Runnable {
                             fR5Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             fR5Accept.setBounds(740, 10, 50, 50);
                         }
-                        JButton fR5Deny = new JButton("X"); {
+                        fR5Deny = new JButton("X"); {
                             fR5Deny.setBackground(lightGrey);
                             fR5Deny.setForeground(accentColor);
                             fR5Deny.setOpaque(true);
@@ -1030,10 +1111,11 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(friendRequestDisp, BorderLayout.CENTER);
 
-            JPanel friendsDisp = new JPanel(); {
+            friendsDisp = new JPanel(); {
                 friendsDisp.setLayout(new BorderLayout());
                 friendsDisp.setBackground(grey);
                 friendsDisp.setVisible(false);
+                friendsDisp.setOpaque(true);
                 JPanel friendsHeader = new JPanel(); {
                     friendsHeader.setBackground(grey);
                     friendsHeader.setPreferredSize(new Dimension(900, 50));
@@ -1044,7 +1126,7 @@ public class Client extends JComponent implements Runnable {
                         friendsHeaderTxt.setFont(new Font("Monospaced", Font.PLAIN, 20));
                         friendsHeaderTxt.setPreferredSize(new Dimension(830, 50));
                     }
-                    JButton addFriend = new JButton("+"); {
+                    addFriend = new JButton("+"); {
                         addFriend.setBackground(lightGrey);
                         addFriend.setForeground(accentColor);
                         addFriend.setFont(new Font("Monospaced", Font.PLAIN, 20));
@@ -1069,7 +1151,7 @@ public class Client extends JComponent implements Runnable {
                             f1User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f1User.setBounds(20, 10, 640, 50);
                         }
-                        JButton f1Accept = new JButton("Unfriend"); {
+                        f1Accept = new JButton("Unfriend"); {
                             f1Accept.setBackground(lightGrey);
                             f1Accept.setForeground(accentColor);
                             f1Accept.setOpaque(true);
@@ -1077,7 +1159,7 @@ public class Client extends JComponent implements Runnable {
                             f1Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f1Accept.setBounds(670, 10, 100, 50);
                         }
-                        JButton f1Deny = new JButton("Block"); {
+                        f1Deny = new JButton("Block"); {
                             f1Deny.setBackground(lightGrey);
                             f1Deny.setForeground(accentColor);
                             f1Deny.setOpaque(true);
@@ -1101,7 +1183,7 @@ public class Client extends JComponent implements Runnable {
                             f2User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f2User.setBounds(20, 10, 640, 50);
                         }
-                        JButton f2Accept = new JButton("Unfriend"); {
+                        f2Accept = new JButton("Unfriend"); {
                             f2Accept.setBackground(lightGrey);
                             f2Accept.setForeground(accentColor);
                             f2Accept.setOpaque(true);
@@ -1109,7 +1191,7 @@ public class Client extends JComponent implements Runnable {
                             f2Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f2Accept.setBounds(670, 10, 100, 50);
                         }
-                        JButton f2Deny = new JButton("Block"); {
+                        f2Deny = new JButton("Block"); {
                             f2Deny.setBackground(lightGrey);
                             f2Deny.setForeground(accentColor);
                             f2Deny.setOpaque(true);
@@ -1133,7 +1215,7 @@ public class Client extends JComponent implements Runnable {
                             f3User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f3User.setBounds(20, 10, 640, 50);
                         }
-                        JButton f3Accept = new JButton("Unfriend"); {
+                        f3Accept = new JButton("Unfriend"); {
                             f3Accept.setBackground(lightGrey);
                             f3Accept.setForeground(accentColor);
                             f3Accept.setOpaque(true);
@@ -1141,7 +1223,7 @@ public class Client extends JComponent implements Runnable {
                             f3Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f3Accept.setBounds(670, 10, 100, 50);
                         }
-                        JButton f3Deny = new JButton("Block"); {
+                        f3Deny = new JButton("Block"); {
                             f3Deny.setBackground(lightGrey);
                             f3Deny.setForeground(accentColor);
                             f3Deny.setOpaque(true);
@@ -1165,7 +1247,7 @@ public class Client extends JComponent implements Runnable {
                             f4User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f4User.setBounds(20, 10, 640, 50);
                         }
-                        JButton f4Accept = new JButton("Unfriend"); {
+                        f4Accept = new JButton("Unfriend"); {
                             f4Accept.setBackground(lightGrey);
                             f4Accept.setForeground(accentColor);
                             f4Accept.setOpaque(true);
@@ -1173,7 +1255,7 @@ public class Client extends JComponent implements Runnable {
                             f4Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f4Accept.setBounds(670, 10, 100, 50);
                         }
-                        JButton f4Deny = new JButton("Block"); {
+                        f4Deny = new JButton("Block"); {
                             f4Deny.setBackground(lightGrey);
                             f4Deny.setForeground(accentColor);
                             f4Deny.setOpaque(true);
@@ -1197,7 +1279,7 @@ public class Client extends JComponent implements Runnable {
                             f5User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f5User.setBounds(20, 10, 640, 50);
                         }
-                        JButton f5Accept = new JButton("Unfriend"); {
+                        f5Accept = new JButton("Unfriend"); {
                             f5Accept.setBackground(lightGrey);
                             f5Accept.setForeground(accentColor);
                             f5Accept.setOpaque(true);
@@ -1205,7 +1287,7 @@ public class Client extends JComponent implements Runnable {
                             f5Accept.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             f5Accept.setBounds(670, 10, 100, 50);
                         }
-                        JButton f5Deny = new JButton("Block"); {
+                        f5Deny = new JButton("Block"); {
                             f5Deny.setBackground(lightGrey);
                             f5Deny.setForeground(accentColor);
                             f5Deny.setOpaque(true);
@@ -1228,7 +1310,7 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(friendsDisp, BorderLayout.CENTER);
 
-            JPanel blockedDisp = new JPanel(); {
+            blockedDisp = new JPanel(); {
                 blockedDisp.setLayout(new BorderLayout());
                 blockedDisp.setBackground(grey);
                 blockedDisp.setVisible(false);
@@ -1257,7 +1339,7 @@ public class Client extends JComponent implements Runnable {
                             b1User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             b1User.setBounds(20, 10, 750, 50);
                         }
-                        JButton b1Unblock = new JButton("Unblock"); {
+                        b1Unblock = new JButton("Unblock"); {
                             b1Unblock.setBackground(lightGrey);
                             b1Unblock.setForeground(accentColor);
                             b1Unblock.setOpaque(true);
@@ -1281,7 +1363,7 @@ public class Client extends JComponent implements Runnable {
                             b2User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             b2User.setBounds(20, 10, 750, 50);
                         }
-                        JButton b2Unblock = new JButton("Unblock"); {
+                        b2Unblock = new JButton("Unblock"); {
                             b2Unblock.setBackground(lightGrey);
                             b2Unblock.setForeground(accentColor);
                             b2Unblock.setOpaque(true);
@@ -1305,7 +1387,7 @@ public class Client extends JComponent implements Runnable {
                             b3User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             b3User.setBounds(20, 10, 750, 50);
                         }
-                        JButton b3Unblock = new JButton("Unblock"); {
+                        b3Unblock = new JButton("Unblock"); {
                             b3Unblock.setBackground(lightGrey);
                             b3Unblock.setForeground(accentColor);
                             b3Unblock.setOpaque(true);
@@ -1329,7 +1411,7 @@ public class Client extends JComponent implements Runnable {
                             b4User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             b4User.setBounds(20, 10, 750, 50);
                         }
-                        JButton b4Unblock = new JButton("Unblock"); {
+                        b4Unblock = new JButton("Unblock"); {
                             b4Unblock.setBackground(lightGrey);
                             b4Unblock.setForeground(accentColor);
                             b4Unblock.setOpaque(true);
@@ -1353,7 +1435,7 @@ public class Client extends JComponent implements Runnable {
                             b5User.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                             b5User.setBounds(20, 10, 750, 50);
                         }
-                        JButton b5Unblock = new JButton("Unblock"); {
+                        b5Unblock = new JButton("Unblock"); {
                             b5Unblock.setBackground(lightGrey);
                             b5Unblock.setForeground(accentColor);
                             b5Unblock.setOpaque(true);
@@ -1375,7 +1457,7 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(blockedDisp, BorderLayout.CENTER);
 
-            JPanel addFriendDisp = new JPanel(); {
+            addFriendDisp = new JPanel(); {
                 addFriendDisp.setLayout(new BorderLayout());
                 addFriendDisp.setBackground(grey);
                 addFriendDisp.setVisible(false);
@@ -1406,7 +1488,7 @@ public class Client extends JComponent implements Runnable {
                         enterFriendUserRequest.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                         enterFriendUserRequest.setBounds(300, 50, 300, 25);
                     }
-                    JButton enterRequest = new JButton("Send Friend Request"); {
+                    enterRequest = new JButton("Send Friend Request"); {
                         enterRequest.setBackground(lightGrey);
                         enterRequest.setForeground(accentColor);
                         enterRequest.setOpaque(true);
@@ -1423,7 +1505,7 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(addFriendDisp, BorderLayout.CENTER);
 
-            JPanel addGroupchatDisp = new JPanel(); {
+            addGroupchatDisp = new JPanel(); {
                 addGroupchatDisp.setLayout(new BorderLayout());
                 addGroupchatDisp.setBackground(grey);
                 addGroupchatDisp.setVisible(false);
@@ -1454,7 +1536,7 @@ public class Client extends JComponent implements Runnable {
                         enterUsersRequest.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                         enterUsersRequest.setBounds(250, 50, 400, 25);
                     }
-                    JButton enterNames = new JButton("Create Groupchat"); {
+                    enterNames = new JButton("Create Groupchat"); {
                         enterNames.setBackground(lightGrey);
                         enterNames.setForeground(accentColor);
                         enterNames.setOpaque(true);
@@ -1471,7 +1553,7 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(addGroupchatDisp, BorderLayout.CENTER);
 
-            JPanel deleteGroupchatDisp = new JPanel(); {
+            deleteGroupchatDisp = new JPanel(); {
                 deleteGroupchatDisp.setLayout(new BorderLayout());
                 deleteGroupchatDisp.setBackground(grey);
                 deleteGroupchatDisp.setVisible(false);
@@ -1502,7 +1584,7 @@ public class Client extends JComponent implements Runnable {
                         enterUsersRequestD.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                         enterUsersRequestD.setBounds(250, 50, 400, 25);
                     }
-                    JButton enterNamesD = new JButton("Delete Groupchat"); {
+                    enterNamesD = new JButton("Delete Groupchat"); {
                         enterNamesD.setBackground(lightGrey);
                         enterNamesD.setForeground(accentColor);
                         enterNamesD.setOpaque(true);
@@ -1519,24 +1601,26 @@ public class Client extends JComponent implements Runnable {
             }
             content.add(deleteGroupchatDisp, BorderLayout.CENTER);
 
-            JPanel profileDisp = new JPanel(); {
+            profileDisp = new JPanel(); {
                 profileDisp.setLayout(null);
                 profileDisp.setBackground(grey);
-                profileDisp.setVisible(true);
+                profileDisp.setVisible(false);
                 profileDisp.setOpaque(true);
                 JLabel profileUsername = new JLabel(); {
                     profileUsername.setBackground(lightGrey);
                     profileUsername.setForeground(accentColor);
+                    profileUsername.setOpaque(true);
                     profileUsername.setFont(new Font("Monospaced", Font.PLAIN, 20));
-                    profileUsername.setText("Username: " + username.getText());
+                    profileUsername.setText("Username: " + userUsername);
                     profileUsername.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                     profileUsername.setBounds(300, 20, 300, 25);
                 }
                 JLabel profilePassword = new JLabel(); {
                     profilePassword.setBackground(lightGrey);
                     profilePassword.setForeground(accentColor);
+                    profilePassword.setOpaque(true);
                     profilePassword.setFont(new Font("Monospaced", Font.PLAIN, 20));
-                    profilePassword.setText("Password: " + password.getText());
+                    profilePassword.setText("Password: " + userPassword);
                     profilePassword.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                     profilePassword.setBounds(300, 55, 300, 25);
                 }
@@ -1554,30 +1638,30 @@ public class Client extends JComponent implements Runnable {
                     profileNewPassword.setBorder(BorderFactory.createLineBorder(accentColor, 2));
                     profileNewPassword.setBounds(300, 135, 300, 25);
                 }
-                JButton profileChangePassword = new JButton("Change Password"); {
+                profileChangePassword = new JButton("Change Password"); {
                     profileChangePassword.setBackground(lightGrey);
                     profileChangePassword.setForeground(accentColor);
+                    profileChangePassword.setOpaque(true);
                     profileChangePassword.setFont(new Font("Monospaced", Font.PLAIN, 20));
                     profileChangePassword.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-                    profileChangePassword.setBounds(400, 170, 100, 25);
+                    profileChangePassword.setBounds(300, 170, 300, 25);
                 }
                 JLabel profileStrangersCanMessage = new JLabel(); {
                     profileStrangersCanMessage.setBackground(lightGrey);
                     profileStrangersCanMessage.setForeground(accentColor);
+                    profileStrangersCanMessage.setOpaque(true);
                     profileStrangersCanMessage.setFont(new Font("Monospaced", Font.PLAIN, 20));
-                    writer.println("isStrangersCanMessage");
-                    writer.flush();
-                    Boolean isStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
-                    profileStrangersCanMessage.setText("Strangers can message me: " + isStrangersCanMessage);
+                    profileStrangersCanMessage.setText("Strangers can message me: " + userStrangersCanMessage);
                     profileStrangersCanMessage.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-                    profileStrangersCanMessage.setBounds(300, 225, 300, 25);
+                    profileStrangersCanMessage.setBounds(250, 225, 400, 25);
                 }
-                JButton changeStrangersCanMessage = new JButton("Change if strangers can message me"); {
+                changeStrangersCanMessage = new JButton("Change if strangers can message me"); {
                     changeStrangersCanMessage.setBackground(lightGrey);
                     changeStrangersCanMessage.setForeground(accentColor);
+                    changeStrangersCanMessage.setOpaque(true);
                     changeStrangersCanMessage.setFont(new Font("Monospaced", Font.PLAIN, 20));
                     changeStrangersCanMessage.setBorder(BorderFactory.createLineBorder(accentColor, 2));
-                    changeStrangersCanMessage.setBounds(400, 270, 100, 25);
+                    changeStrangersCanMessage.setBounds(225, 270, 450, 25);
                 }
                 profileDisp.add(profileUsername);
                 profileDisp.add(profilePassword);
@@ -1592,7 +1676,7 @@ public class Client extends JComponent implements Runnable {
             mainFrame.setSize(1000, 1000);
             mainFrame.setLocationRelativeTo(null);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainFrame.setVisible(true);
+            mainFrame.setVisible(false);
 
         } catch (Exception e) {
             e.printStackTrace();
