@@ -1684,4 +1684,15 @@ public class Client extends JComponent implements Runnable {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    private void connectToServer() {
+        try {
+            Socket socket = new Socket("localhost", 215);
+            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.writer = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Unable to connect to the server.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+    }
+
 }
