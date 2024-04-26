@@ -1,6 +1,6 @@
 
 /**
- * A class to store messages, the person who sent them, 
+ * A class to store messages, the person who sent them,
  * if they have a photo, if they've been seen, then the time sent
  *
  * <p>Purdue University -- CS18000 -- Fall 2022 -- Project 5 -- Phase 2
@@ -63,6 +63,15 @@ public class Message {
         } else {
             this.time = time;
         }
+    }
+    public Message(User user, String message) {
+        this.user = user;
+        this.message = message;
+    }
+    public Message(User user, String message, String photoPath) {
+        this.user = user;
+        this.message = message;
+        this.photoPath = "";
     }
 
 
