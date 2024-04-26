@@ -126,6 +126,7 @@ public class Server {
             return false;
         }
 
+
         public Message parseMessage(String line) {
             String username = line.substring(0, line.indexOf(";"));
             Message message;
@@ -274,6 +275,37 @@ public class Server {
                 while (cont) {
                     String dataLine = reader.readLine();
                     switch (dataLine) {
+                        case "login":
+                            String username = reader.readLine();
+                            String password = reader.readLine();
+                            String response = "failure";
+
+                            for (User user : newDatabase.getUsers()) {
+                                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                                    response = "success";
+                                    clientUser = user;
+                                    break;
+                                }
+                            }
+                            writer.println(response);                            break;
+                        case "newUser":
+                            String use = reader.readLine();
+                            String pass = reader.readLine();
+                            for (User user : newDatabase.getUsers()) {
+                                if (user.getUsername().equals(use)) {
+                                    writer.println("taken");
+                                    return;
+                                }
+                            }
+
+                            try {
+                                User newUser = new User(use, pass, false);
+                                newDatabase.addUser(newUser);
+                                clientUser = newUser;
+                                writer.println("success");
+                            } catch (InvalidPasswordException ex) {
+                                writer.println("invalidPassword");
+                            }                            break;
                         case "addFriend":
                             String otherUsername = reader.readLine();
                             Boolean success = sendFriendRequest(clientUser, otherUsername);
@@ -340,7 +372,7 @@ public class Server {
                             }
                             writer.println("" + success);
                             break;
-                        case "isStrangersCanMessage": 
+                        case "isStrangersCanMessage":
                             writer.println(clientUser.isStrangersCanMessage());
                             break;
                         case "setStrangersCanMessage":
