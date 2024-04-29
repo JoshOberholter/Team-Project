@@ -146,7 +146,6 @@ public class Client extends JComponent implements Runnable {
                     if (response.equals("success")) {
                         userUsername = username.getText();
                         userPassword = password.getText();
-                        userStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
                         loginFrame.setVisible(false);
                         mainFrame.setVisible(true);
                     } else {
@@ -180,11 +179,11 @@ public class Client extends JComponent implements Runnable {
                     if (response.equals("success")) {
                         userUsername = username.getText();
                         userPassword = password.getText();
-                        userStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
                         loginFrame.setVisible(false);
                         mainFrame.setVisible(true);
                     } else if (response.equals("invalidPassword")){
-                        JOptionPane.showMessageDialog(null, "Invalid Password",
+                        JOptionPane.showMessageDialog(null, "Password must have at least 3 numbers, 3 letters," +
+                                        " 3 special character, and a length of 10",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     } else if (response.equals("taken")) {
                         JOptionPane.showMessageDialog(null, "Username is Taken",
@@ -212,7 +211,6 @@ public class Client extends JComponent implements Runnable {
                     fRPanel.add(fR3);
                     fRPanel.add(fR4);
                     fRPanel.add(fR5);
-                    writer.println("getFriendRequests");
                     writer.flush();
                     int i = Integer.parseInt(reader.readLine());
                     if (i > 5) {
@@ -242,7 +240,6 @@ public class Client extends JComponent implements Runnable {
                             }
                         }
                     }
-                    System.out.println("friendRequest pressed");
                     friendRequestDisp.setVisible(true);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -256,7 +253,6 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == friends) {
                 try {
-                    System.out.println("friends pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(true);
@@ -270,7 +266,6 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == blocked) {
                 try {
-                    System.out.println("blocked pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -284,7 +279,6 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == addFriend) {
                 try {
-                    System.out.println("addFriend pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -298,7 +292,6 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == addGC) {
                 try {
-                    System.out.println("addGC pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -312,7 +305,6 @@ public class Client extends JComponent implements Runnable {
             }
             if (e.getSource() == deleteGC) {
                 try {
-                    System.out.println("deleteGC pressed");
                     friendRequestDisp.setVisible(false);
                     gcDisp.setVisible(false);
                     friendsDisp.setVisible(false);
@@ -416,6 +408,7 @@ public class Client extends JComponent implements Runnable {
                 header.setBorder(BorderFactory.createLineBorder(grey, 2));
                 header.setOpaque(true);
                 header.setBackground(darkGrey);
+                header.setVisible(true);
                 ImageIcon icon = new ImageIcon("StarRun.png");
                 JLabel headerBackgroundImg = new JLabel(icon); {
                     headerBackgroundImg.setOpaque(true);
@@ -478,7 +471,7 @@ public class Client extends JComponent implements Runnable {
                     gcListList.setBackground(darkGrey);
                     gcListList.setLayout(null);
 
-                    gc1 = new JButton(" Filler "); {
+                    gc1 = new JButton(" GroupChat 1 "); {
                         gc1.setBackground(grey);
                         gc1.setForeground(starColor);
                         gc1.setOpaque(true);
@@ -487,7 +480,7 @@ public class Client extends JComponent implements Runnable {
                         gc1.setBounds(5, 5, 90, 25);
                         gc1.setVisible(true);
                     }
-                    gc2 = new JButton(" Filler "); {
+                    gc2 = new JButton(" GroupChat 2 "); {
                         gc2.setBackground(grey);
                         gc2.setForeground(starColor);
                         gc2.setOpaque(true);
@@ -496,34 +489,34 @@ public class Client extends JComponent implements Runnable {
                         gc2.setBounds(5, 35, 90, 25);
                         gc2.setVisible(true);
                     }
-                    gc3 = new JButton(" Filler "); {
+                    gc3 = new JButton(" GroupChat 3 "); {
                         gc3.setBackground(grey);
                         gc3.setForeground(starColor);
                         gc3.setOpaque(true);
                         gc3.setFont(buttonFont);
                         gc3.setBorder(BorderFactory.createLineBorder(starColor, 2));
                         gc3.setBounds(5, 65, 90, 25);
-                        gc3.setVisible(false);
+                        gc3.setVisible(true);
                     }
-                    gc4 = new JButton(" Filler "); {
+                    gc4 = new JButton(" GroupChat 4 "); {
                         gc4.setBackground(grey);
                         gc4.setForeground(starColor);
                         gc4.setOpaque(true);
                         gc4.setFont(buttonFont);
                         gc4.setBorder(BorderFactory.createLineBorder(starColor, 2));
                         gc4.setBounds(5, 95, 90, 25);
-                        gc4.setVisible(false);
+                        gc4.setVisible(true);
                     }
-                    gc5 = new JButton(" Filler "); {
+                    gc5 = new JButton(" GroupChat 5 "); {
                         gc5.setBackground(grey);
                         gc5.setForeground(starColor);
                         gc5.setOpaque(true);
                         gc5.setFont(buttonFont);
                         gc5.setBorder(BorderFactory.createLineBorder(starColor, 2));
                         gc5.setBounds(5, 125, 90, 25);
-                        gc5.setVisible(false);
+                        gc5.setVisible(true);
                     }
-                    gc6 = new JButton(" Filler "); {
+                    gc6 = new JButton(" GroupChat 6 "); {
                         gc6.setBackground(grey);
                         gc6.setForeground(starColor);
                         gc6.setOpaque(true);
@@ -532,7 +525,7 @@ public class Client extends JComponent implements Runnable {
                         gc6.setBounds(5, 155, 90, 25);
                         gc6.setVisible(false);
                     }
-                    gc7 = new JButton(" Filler "); {
+                    gc7 = new JButton(" GroupChat 7 "); {
                         gc7.setBackground(grey);
                         gc7.setForeground(starColor);
                         gc7.setOpaque(true);
@@ -541,7 +534,7 @@ public class Client extends JComponent implements Runnable {
                         gc7.setBounds(5, 185, 90, 25);
                         gc7.setVisible(false);
                     }
-                    gc8 = new JButton(" Filler "); {
+                    gc8 = new JButton(" GroupChat 8 "); {
                         gc8.setBackground(grey);
                         gc8.setForeground(starColor);
                         gc8.setOpaque(true);
@@ -550,7 +543,7 @@ public class Client extends JComponent implements Runnable {
                         gc8.setBounds(5, 215, 90, 25);
                         gc8.setVisible(false);
                     }
-                    gc9 = new JButton(" Filler "); {
+                    gc9 = new JButton(" GroupChat 9 "); {
                         gc9.setBackground(grey);
                         gc9.setForeground(starColor);
                         gc9.setOpaque(true);
@@ -559,7 +552,7 @@ public class Client extends JComponent implements Runnable {
                         gc9.setBounds(5, 245, 90, 25);
                         gc9.setVisible(false);
                     }
-                    gc10 = new JButton(" Filler "); {
+                    gc10 = new JButton(" GroupChat 10 "); {
                         gc10.setBackground(grey);
                         gc10.setForeground(starColor);
                         gc10.setOpaque(true);
@@ -610,7 +603,8 @@ public class Client extends JComponent implements Runnable {
             gcDisp = new JPanel(); {
                 gcDisp.setBackground(grey);
                 gcDisp.setLayout(new BorderLayout());
-                gcDisp.setVisible(false);
+                gcDisp.setOpaque(true);
+                gcDisp.setVisible(true);
                 JPanel gcMessageDisp = new JPanel(); {
                     gcMessageDisp.setLayout(new BoxLayout(gcMessageDisp, BoxLayout.Y_AXIS));
                     gcMessageDisp.setBackground(grey);
@@ -621,7 +615,7 @@ public class Client extends JComponent implements Runnable {
                     msg1.setOpaque(true);
                     msg1.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg1.setLayout(new BoxLayout(msg1, BoxLayout.Y_AXIS));
-                    msg1.setVisible(false);
+                    msg1.setVisible(true);
                     JLabel msg1Info = new JLabel(); {
                         msg1Info.setText("Username  time");
                         msg1Info.setForeground(accentColor);
@@ -646,7 +640,7 @@ public class Client extends JComponent implements Runnable {
                     msg2.setOpaque(true);
                     msg2.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg2.setLayout(new BoxLayout(msg2, BoxLayout.Y_AXIS));
-                    msg2.setVisible(false);
+                    msg2.setVisible(true);
                     JLabel msg2Info = new JLabel(); {
                         msg2Info.setText("Username  time");
                         msg2Info.setForeground(accentColor);
@@ -671,7 +665,7 @@ public class Client extends JComponent implements Runnable {
                     msg3.setOpaque(true);
                     msg3.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg3.setLayout(new BoxLayout(msg3, BoxLayout.Y_AXIS));
-                    msg3.setVisible(false);
+                    msg3.setVisible(true);
                     JLabel msg3Info = new JLabel(); {
                         msg3Info.setText("Username  time");
                         msg3Info.setForeground(accentColor);
@@ -696,7 +690,7 @@ public class Client extends JComponent implements Runnable {
                     msg4.setOpaque(true);
                     msg4.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg4.setLayout(new BoxLayout(msg4, BoxLayout.Y_AXIS));
-                    msg4.setVisible(false);
+                    msg4.setVisible(true);
                     JLabel msg4Info = new JLabel(); {
                         msg4Info.setText("Username  time");
                         msg4Info.setForeground(accentColor);
@@ -721,7 +715,7 @@ public class Client extends JComponent implements Runnable {
                     msg5.setOpaque(true);
                     msg5.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg5.setLayout(new BoxLayout(msg5, BoxLayout.Y_AXIS));
-                    msg5.setVisible(false);
+                    msg5.setVisible(true);
                     JLabel msg5Info = new JLabel(); {
                         msg5Info.setText("Username  time");
                         msg5Info.setForeground(accentColor);
@@ -746,7 +740,7 @@ public class Client extends JComponent implements Runnable {
                     msg6.setOpaque(true);
                     msg6.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg6.setLayout(new BoxLayout(msg6, BoxLayout.Y_AXIS));
-                    msg6.setVisible(false);
+                    msg6.setVisible(true);
                     JLabel msg6Info = new JLabel(); {
                         msg6Info.setText("Username  time");
                         msg6Info.setForeground(accentColor);
@@ -771,7 +765,7 @@ public class Client extends JComponent implements Runnable {
                     msg7.setOpaque(true);
                     msg7.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg7.setLayout(new BoxLayout(msg7, BoxLayout.Y_AXIS));
-                    msg7.setVisible(false);
+                    msg7.setVisible(true);
                     JLabel msg7Info = new JLabel(); {
                         msg7Info.setText("Username  time");
                         msg7Info.setForeground(accentColor);
@@ -796,7 +790,7 @@ public class Client extends JComponent implements Runnable {
                     msg8.setOpaque(true);
                     msg8.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg8.setLayout(new BoxLayout(msg8, BoxLayout.Y_AXIS));
-                    msg8.setVisible(false);
+                    msg8.setVisible(true);
                     JLabel msg8Info = new JLabel(); {
                         msg8Info.setText("Username  time");
                         msg8Info.setForeground(accentColor);
@@ -821,7 +815,7 @@ public class Client extends JComponent implements Runnable {
                     msg9.setOpaque(true);
                     msg9.setBorder(BorderFactory.createLineBorder(grey, 20));
                     msg9.setLayout(new BoxLayout(msg9, BoxLayout.Y_AXIS));
-                    msg9.setVisible(false);
+                    msg9.setVisible(true);
                     JLabel msg9Info = new JLabel(); {
                         msg9Info.setText("Username  time");
                         msg9Info.setForeground(accentColor);
@@ -1114,7 +1108,7 @@ public class Client extends JComponent implements Runnable {
             friendsDisp = new JPanel(); {
                 friendsDisp.setLayout(new BorderLayout());
                 friendsDisp.setBackground(grey);
-                friendsDisp.setVisible(false);
+                friendsDisp.setVisible(true);
                 friendsDisp.setOpaque(true);
                 JPanel friendsHeader = new JPanel(); {
                     friendsHeader.setBackground(grey);
@@ -1313,7 +1307,7 @@ public class Client extends JComponent implements Runnable {
             blockedDisp = new JPanel(); {
                 blockedDisp.setLayout(new BorderLayout());
                 blockedDisp.setBackground(grey);
-                blockedDisp.setVisible(false);
+                blockedDisp.setVisible(true);
                 blockedDisp.setOpaque(true);
                 JLabel blockedHeader = new JLabel("  Blocked"); {
                     blockedHeader.setBackground(grey);
@@ -1508,7 +1502,7 @@ public class Client extends JComponent implements Runnable {
             addGroupchatDisp = new JPanel(); {
                 addGroupchatDisp.setLayout(new BorderLayout());
                 addGroupchatDisp.setBackground(grey);
-                addGroupchatDisp.setVisible(false);
+                addGroupchatDisp.setVisible(true);
                 addGroupchatDisp.setOpaque(true);
                 JLabel addGroupchatHeader = new JLabel("  Add Groupchat"); {
                     addGroupchatHeader.setBackground(grey);
@@ -1556,7 +1550,7 @@ public class Client extends JComponent implements Runnable {
             deleteGroupchatDisp = new JPanel(); {
                 deleteGroupchatDisp.setLayout(new BorderLayout());
                 deleteGroupchatDisp.setBackground(grey);
-                deleteGroupchatDisp.setVisible(false);
+                deleteGroupchatDisp.setVisible(true);
                 deleteGroupchatDisp.setOpaque(true);
                 JLabel deleteGroupchatHeader = new JLabel("  Delete Groupchat"); {
                     deleteGroupchatHeader.setBackground(grey);
