@@ -257,6 +257,7 @@ public class Server {
                             if (!response.equals("taken")) {
                                 User newUser = new User(username, password, false);
                                 newDatabase.addUser(newUser);
+                                newDatabase.writeDatabase();
                                 clientUser = newUser;
                                 writer.write("success");
                                 writer.println();
@@ -287,13 +288,17 @@ public class Server {
                                     break;
                                 }
                             }
-                            writer.println(response);                            break;
+                            writer.println(response);
+                            writer.flush();
+                            break;
                         case "newUser":
                             String use = reader.readLine();
                             String pass = reader.readLine();
                             for (User user : newDatabase.getUsers()) {
                                 if (user.getUsername().equals(use)) {
                                     writer.println("taken");
+                                    writer.flush();
+
                                     return;
                                 }
                             }
@@ -303,29 +308,41 @@ public class Server {
                                 newDatabase.addUser(newUser);
                                 clientUser = newUser;
                                 writer.println("success");
+                                writer.flush();
+
                             } catch (InvalidPasswordException ex) {
                                 writer.println("invalidPassword");
+                                writer.flush();
+
                             }                            break;
                         case "addFriend":
                             String otherUsername = reader.readLine();
                             Boolean success = sendFriendRequest(clientUser, otherUsername);
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "removeFriend":
                             otherUsername = reader.readLine();
                             success = removeFriend(clientUser, otherUsername);
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "respondFriendRequest":
                             otherUsername = reader.readLine();
                             Boolean accepted = Boolean.parseBoolean(reader.readLine());
                             success = respondFriendRequest(clientUser, otherUsername, accepted);
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "blockUser":
                             otherUsername = reader.readLine();
                             success = blocked(clientUser, otherUsername);
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "startGroupchat":
                             ArrayList<User> participantsInGroupChat = new ArrayList<User>();
@@ -343,14 +360,20 @@ public class Server {
                                 }
                                 startGroupchat(participantsInGroupChat);
                                 writer.println("true");
+                                writer.flush();
+
                             } catch (Exception e) {
                                 writer.println("false");
+                                writer.flush();
+
                             }
                             break;
                         case "deleteGroupchat":
                             GroupChat groupchat = parseGroupchat(reader.readLine());
                             success = deleteGroupchat(groupchat);
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "addMessage":
                             groupchat = parseGroupchat(reader.readLine());
@@ -361,6 +384,8 @@ public class Server {
                                 success = addMessage(groupchat, message);
                             }
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "deleteMessage":
                             groupchat = parseGroupchat(reader.readLine());
@@ -371,24 +396,34 @@ public class Server {
                                 success = deleteMessage(groupchat, message);
                             }
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "isStrangersCanMessage":
                             writer.println(clientUser.isStrangersCanMessage());
+                            writer.flush();
+
                             break;
                         case "setStrangersCanMessage":
                             try {
                                 boolean newStrangersCanMessage = Boolean.parseBoolean(reader.readLine());
                                 clientUser.setStrangersCanMessage(newStrangersCanMessage);
                                 writer.println("true");
+                                writer.flush();
+
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                                 writer.println("false");
+                                writer.flush();
+
                             }
                             break;
                         case "changePassword":
                             String newPassword = reader.readLine();
                             success = clientUser.setPassword(newPassword);
                             writer.println("" + success);
+                            writer.flush();
+
                             break;
                         case "exit":
                             cont = false;
